@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:radar/widgets/bottom_bar.dart';
 import 'package:radar/widgets/chart/chart.dart';
 import 'package:radar/widgets/custom_drawer.dart';
-import 'package:charts_flutter/flutter.dart';
 
 class HomePage extends StatelessWidget {
   @override
@@ -14,9 +13,15 @@ class HomePage extends StatelessWidget {
         drawer: CustomDrawer(),
         resizeToAvoidBottomPadding: false,
         body: Container(
-          color: Colors.amberAccent,
+          color: Colors.white,
           child: Column(children: <Widget>[
-            PieOutsideLabelChart.withSampleData()
+            Padding(
+              padding: const EdgeInsets.only(top: 30),
+              child: Container(
+                  height: 500,
+                  child: PieOutsideLabelChart.withSampleData()
+              ),
+            )
           ]),
         ),
         bottomNavigationBar: BottomBar(),

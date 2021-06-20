@@ -20,16 +20,6 @@ class Data with ChangeNotifier {
       "route": "/"
     },
     {
-      "icon": MaterialCommunityIcons.view_list,
-      "label": "Ideas",
-      "route": "/ideas"
-    },
-    {
-      "icon": MaterialCommunityIcons.brain,
-      "label": "Storm",
-      "route": "/storm"
-    },
-    {
       "icon": MaterialCommunityIcons.account_outline,
       "label": "Profile",
       "route": "/profile"

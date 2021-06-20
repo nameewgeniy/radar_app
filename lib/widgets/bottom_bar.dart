@@ -28,7 +28,6 @@ class BottomBar extends StatelessWidget {
         }).toList()
       )
     );
-
   }
 
 }
