@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:radar/api/api.dart';
 import 'package:radar/models/data.dart';
 import 'package:provider/provider.dart';
 
@@ -57,6 +58,7 @@ class BottomBarItem extends StatelessWidget {
       height: double.infinity,
       child: FlatButton(
         onPressed: () {
+          Api().get(method: "https://localhost/funds?page=1");
           navigationData.changePage(context, route);
           return true;
         },
