@@ -9,7 +9,7 @@ import 'package:radar/widgets/custom_drawer.dart';
 class AssetsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final Controller c = Get.put(Controller());
+    final MainController c = Get.find<MainController>();
 
     return Material(
       clipBehavior: Clip.antiAliasWithSaveLayer,

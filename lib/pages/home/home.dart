@@ -8,12 +8,13 @@ import 'package:radar/widgets/chart/circulars.dart';
 import 'package:radar/widgets/custom_drawer.dart';
 import 'package:radar/widgets/group_buttons.dart';
 import 'package:radar/widgets/header_title.dart';
+import 'package:radar/widgets/list_fuds_state.dart';
 
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    final Controller c = Get.put(Controller());
+    final MainController c = Get.find<MainController>();
 
     return Material(
       clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -31,23 +32,36 @@ class HomePage extends StatelessWidget {
               padding: const EdgeInsets.only(left:20, top: 20, bottom: 10, right: 0),
               child: GroupButtons(),
             ),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Padding(
-                padding: const EdgeInsets.only(left:20, top: 0, bottom: 0, right: 0),
-                child: HeaderTitle(
-                  text: "Ценные бумаги",
-                ),
+            Expanded(
+              child: ListView(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left:20, top: 5, bottom: 5, right: 0),
+                    child: HeaderTitle(
+                      text: "Ценные бумаги",
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10, top: 10, bottom: 10, right: 10),
+                    child: Circulars(),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left:20, top: 5, bottom: 5, right: 0),
+                    child: HeaderTitle(
+                      text: "Отрасли",
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left:20, top: 5, bottom: 0, right: 20),
+                    child: ListFundState(),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 0),
+                    child: Container(
+                        height: 500, child: PieOutsideLabelChart.withSampleData()),
+                  ),
+                ],
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left:20, top: 10, bottom: 10, right: 0),
-              child: Circulars(),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 30),
-              child: Container(
-                  height: 500, child: PieOutsideLabelChart.withSampleData()),
             ),
           ]),
         ),

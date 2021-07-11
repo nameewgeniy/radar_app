@@ -1,5 +1,7 @@
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:radar/main.dart';
 
 class PieOutsideLabelChart extends StatelessWidget {
   final List<charts.Series> seriesList;
@@ -9,49 +11,45 @@ class PieOutsideLabelChart extends StatelessWidget {
 
   factory PieOutsideLabelChart.withSampleData() {
     return new PieOutsideLabelChart(
-      _createSampleData(),
-      // Disable animations for image tests.
-      animate: false,
+      _prepareData(),
+      animate: true,
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
-    return new charts.PieChart(seriesList,
+    return Obx(() => Container(
+        child: new charts.PieChart(seriesList,
         animate: animate,
-        defaultRenderer: new charts.ArcRendererConfig(arcRendererDecorators: [
-          new charts.ArcLabelDecorator(
-              labelPosition: charts.ArcLabelPosition.outside)
-        ]));
+        defaultRenderer: new charts.ArcRendererConfig(
+            arcWidth: 150,
+            arcRendererDecorators: [new charts.ArcLabelDecorator()])
+      )
+    ));
   }
 
-  /// Create one series with sample hard coded data.
-  static List<charts.Series<LinearSales, int>> _createSampleData() {
-    final data = [
-      new LinearSales(0, 100),
-      new LinearSales(1, 75),
-      new LinearSales(2, 25),
-      new LinearSales(3, 5),
-    ];
+ static List<charts.Series<LinearItem, int>> _prepareData() {
+
+    final MainController c = Get.find<MainController>();
+
+    final data = c.fundsStateList.map((element) => new LinearItem(element.percent, element.percent.toInt(), element.title)).toList();
 
     return [
-      new charts.Series<LinearSales, int>(
+      new charts.Series<LinearItem, int>(
         id: 'Sales',
-        domainFn: (LinearSales sales, _) => sales.year,
-        measureFn: (LinearSales sales, _) => sales.sales,
+        domainFn: (LinearItem item, _) => item.percent.toInt(),
+        measureFn: (LinearItem item, _) => item.measure,
         data: data,
-        // Set a label accessor to control the text of the arc label.
-        labelAccessorFn: (LinearSales row, _) => '${row.year}: ${row.sales}',
+        labelAccessorFn: (LinearItem row, _) => '${row.percent.toInt()}%',
       )
     ];
   }
 }
 
-/// Sample linear data type.
-class LinearSales {
-  final int year;
-  final int sales;
+class LinearItem {
+  final String title;
+  final double percent;
+  final int measure;
 
-  LinearSales(this.year, this.sales);
+  LinearItem(this.percent, this.measure, this.title);
 }

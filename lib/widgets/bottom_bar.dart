@@ -12,7 +12,6 @@ class BottomBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    final Controller c = Get.find();
     final width = MediaQuery.of(context).size.width / Pages.pages.length;
 
     return Container(
