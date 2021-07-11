@@ -1,31 +1,20 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:radar/models/data.dart';
-import 'package:radar/pages/home/home.dart';
-import 'package:provider/provider.dart';
+import 'package:get/get.dart';
+import 'package:radar/pages/pages.dart';
+import 'package:radar/routes/routes.dart';
 
+void main() => runApp(GetMaterialApp(
+  getPages: Pages.pages,
+  initialRoute: Routes.initial,
+));
 
-void main() {
-  runApp(MyApp());
-}
+class Controller extends GetxController{
 
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return ChangeNotifierProvider<Data>(
-      create: (context) => Data(),
-      child: MaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          fontFamily: "Roboto",
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-          backgroundColor: Colors.amber,
-          canvasColor: Colors.amber,
-        ),
-        initialRoute: "/",
-        routes: {
-          '/': (context) => HomePage(),
-        },
-      ),
-    );
+  var isSelected = <bool>[false, false, false, false, false, false].obs;
+
+  selectedDate(index) {
+    isSelected.value[index] = !isSelected.value[index];
+    update();
   }
 }

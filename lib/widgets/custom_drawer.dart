@@ -18,7 +18,7 @@ class CustomDrawer extends StatelessWidget {
                 color: Colors.amberAccent,
               ),
               child: Text(
-                'Menu',
+                'Меню',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 24,
@@ -28,7 +28,7 @@ class CustomDrawer extends StatelessWidget {
           ),
           ListTile(
             leading: Icon(Icons.settings),
-            title: Text('Settings'),
+            title: Text('Настройки'),
           ),
         ],
       ),

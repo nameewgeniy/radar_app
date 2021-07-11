@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:radar/api/api.dart';
-import 'package:radar/models/data.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_icons/flutter_icons.dart';
+import 'package:get/get.dart';
+import 'package:radar/enum/enum.dart';
+import 'package:radar/main.dart';
+import 'package:radar/pages/pages.dart';
+import 'package:radar/routes/routes.dart';
 
 class BottomBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
 
-    final navigationData = Provider.of<Data>(context);
-    final width = MediaQuery.of(context).size.width / navigationData.navigationItems.length;
+    final Controller c = Get.find();
+    final width = MediaQuery.of(context).size.width / Pages.pages.length;
 
     return Container(
       width: double.infinity,
@@ -19,14 +22,14 @@ class BottomBar extends StatelessWidget {
         color: Colors.white,
       ),
       child: Row(
-        children: navigationData.navigationItems.map((element) {
-          return BottomBarItem(
-            element["icon"],
-            element["label"],
-            width,
-            element["route"]
-          );
-        }).toList()
+        children: [
+          BottomBarItem(
+              MaterialCommunityIcons.home_variant, "Главная", width, Routes.initial
+          ),
+          BottomBarItem(
+              MaterialCommunityIcons.account_outline, "Акции", width, Routes.assets
+          ),
+        ]
       )
     );
   }
@@ -51,15 +54,13 @@ class BottomBarItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    final navigationData = Provider.of<Data>(context);
-
     return Container(
       width: width,
       height: double.infinity,
       child: FlatButton(
         onPressed: () {
-          Api().get(method: "https://localhost/funds?page=1");
-          navigationData.changePage(context, route);
+          //Api().get(method: "https://localhost/funds?page=1");
+          Get.toNamed(route);
           return true;
         },
         child: Center(
@@ -69,14 +70,14 @@ class BottomBarItem extends StatelessWidget {
             children: [
               Icon(
                   icon,
-                  color: navigationData.currentRoute == route ? Data.firstColor : color,
+                  color: Get.currentRoute == route ? Enum.firstColor : color,
                   size: 25
               ),
               Text(
                 label,
                 style: TextStyle(
                   fontSize: 12,
-                  color: navigationData.currentRoute == route ? Data.firstColor : color
+                  color: Get.currentRoute == route ? Enum.firstColor : color
                 ),
               )
             ],
