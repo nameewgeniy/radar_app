@@ -57,8 +57,10 @@ class HomePage extends StatelessWidget {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 0),
-                    child: Container(
-                        height: 500, child: PieOutsideLabelChart.withSampleData()),
+                    child: Obx(() => Container(
+                        height: 500,
+                        child: PieOutsideLabelChart.withSampleData()
+                    )),
                   ),
                 ],
               ),

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 
@@ -5,7 +7,7 @@ Dio apiDio = Dio();
 
 class Api  {
 
-  Future<Map<String, dynamic>> get({
+  Future get({
     @required String method,
     Map<String, dynamic> queryParameters
   }) async {
@@ -18,8 +20,12 @@ class Api  {
           headers: headers,
         ),
       );
-      if (response.statusCode == 200) return response.data;
-        throw response;
+      if (response.statusCode == 200) {
+        return response.data['Data'];
+      }
+
+      throw response;
+
     } catch (error) {
       throw error;
     }

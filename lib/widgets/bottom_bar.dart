@@ -3,7 +3,6 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:get/get.dart';
 import 'package:radar/enum/enum.dart';
-import 'package:radar/main.dart';
 import 'package:radar/pages/pages.dart';
 import 'package:radar/routes/routes.dart';
 
@@ -58,7 +57,6 @@ class BottomBarItem extends StatelessWidget {
       height: double.infinity,
       child: FlatButton(
         onPressed: () {
-          //Api().get(method: "https://localhost/funds?page=1");
           Get.toNamed(route);
           return true;
         },

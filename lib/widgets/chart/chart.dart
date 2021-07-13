@@ -18,14 +18,14 @@ class PieOutsideLabelChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() => Container(
+    return Container(
         child: new charts.PieChart(seriesList,
         animate: animate,
         defaultRenderer: new charts.ArcRendererConfig(
             arcWidth: 150,
             arcRendererDecorators: [new charts.ArcLabelDecorator()])
       )
-    ));
+    );
   }
 
  static List<charts.Series<LinearItem, int>> _prepareData() {

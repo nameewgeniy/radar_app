@@ -23,75 +23,74 @@ class GroupButtons extends StatelessWidget {
             children: [
               Container(
                 margin: EdgeInsets.only(right: 10),
-                child: DateButton(
-                  background: Color.fromARGB(255, 245, 217, 214),
-                  color: Color.fromARGB(255, 210, 72, 56),
+                child: Obx(() => DateButton(
                   text: "Месяц",
-                  active: true,
+                  active: c.currentDateIndex.value == 1 ? true : false,
                   onPressed: () {
-                    // Respond to button press
+                    c.selectedDate(1);
                   },
-                ),
+                )),
               ),
               Container(
                 margin: EdgeInsets.only(right: 10),
-                child: DateButton(
+                child: Obx(() => DateButton(
                   text: "3 месяца",
-                  active: false,
+                  active: c.currentDateIndex.value == 2 ? true : false,
                   onPressed: () {
-                    // Respond to button press
+                    c.selectedDate(2);
                   },
-                ),
+                )),
               ),
               Container(
                 margin: EdgeInsets.only(right: 10),
-                child: DateButton(
+                child: Obx(() => DateButton(
                   text: "6 месяцев",
-                  active: false,
+                  active: c.currentDateIndex.value == 3 ? true : false,
                   onPressed: () {
-                    // Respond to button press
+                    c.selectedDate(3);
                   },
-                ),
+                )),
               ),
               Container(
                 margin: EdgeInsets.only(right: 10),
-                child: DateButton(
+                child: Obx(() => DateButton(
                   text: "С начала года",
-                  active: false,
+                  active: c.currentDateIndex.value == 4 ? true : false,
                   onPressed: () {
-                    // Respond to button press
+                    c.selectedDate(4);
                   },
-                ),
+                )),
               ),
-              Container(
+              AnimatedContainer(
+                duration: const Duration(seconds: 2),
                 margin: EdgeInsets.only(right: 10),
-                child: DateButton(
+                child: Obx(() => DateButton(
                   text: "Год",
-                  active: false,
+                  active: c.currentDateIndex.value == 5 ? true : false,
                   onPressed: () {
-                    // Respond to button press
+                    c.selectedDate(5);
                   },
-                ),
+                )),
               ),
               Container(
                 margin: EdgeInsets.only(right: 10),
-                child: DateButton(
+                child: Obx(() => DateButton(
                   text: "3 года",
-                  active: false,
+                  active: c.currentDateIndex.value == 6 ? true : false,
                   onPressed: () {
-                    // Respond to button press
+                    c.selectedDate(6);
                   },
-                ),
+                )),
               ),
               Container(
                 margin: EdgeInsets.only(right: 10),
-                child: DateButton(
+                child: Obx(() => DateButton(
                   text: "За всё время",
-                  active: false,
+                  active: c.currentDateIndex.value == 7 ? true : false,
                   onPressed: () {
-                    // Respond to button press
+                    c.selectedDate(7);
                   },
-                ),
+                )),
               )
             ],
           ),
@@ -120,8 +119,8 @@ class DateButton extends StatelessWidget {
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
         elevation: 0,
-        primary: background ?? Colors.black54,
-        onPrimary: color ?? Colors.white,
+        primary: background ?? Color.fromARGB(255, 245, 217, 214),
+        onPrimary: color ?? Color.fromARGB(255, 210, 72, 56),
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(100.0),
         ),
