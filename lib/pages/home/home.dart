@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:radar/enum/enum.dart';
 import 'package:radar/main.dart';
 import 'package:radar/widgets/bottom_bar.dart';
 import 'package:radar/widgets/chart/chart.dart';
 import 'package:radar/widgets/chart/circulars.dart';
+import 'package:radar/widgets/chart/horizontal.dart';
 import 'package:radar/widgets/custom_drawer.dart';
 import 'package:radar/widgets/group_buttons.dart';
 import 'package:radar/widgets/header_title.dart';
@@ -29,7 +31,7 @@ class HomePage extends StatelessWidget {
           color: Colors.white,
           child: Column(children: <Widget>[
             Padding(
-              padding: const EdgeInsets.only(left:20, top: 20, bottom: 10, right: 0),
+              padding: const EdgeInsets.only(left:20, top: 10, bottom: 10, right: 0),
               child: GroupButtons(),
             ),
             Expanded(
@@ -58,8 +60,8 @@ class HomePage extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(top: 0),
                     child: Obx(() => Container(
-                        height: 500,
-                        child: PieOutsideLabelChart.withSampleData()
+                        height: 200,
+                        child: HorizontalBarLabelChart.withSampleData()
                     )),
                   ),
                 ],

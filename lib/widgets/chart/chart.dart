@@ -22,7 +22,7 @@ class PieOutsideLabelChart extends StatelessWidget {
         child: new charts.PieChart(seriesList,
         animate: animate,
         defaultRenderer: new charts.ArcRendererConfig(
-            arcWidth: 150,
+              arcWidth: 50,
             arcRendererDecorators: [new charts.ArcLabelDecorator()])
       )
     );

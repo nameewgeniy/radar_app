@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:radar/enum/enum.dart';
 
 class CustomDrawer extends StatelessWidget {
 
@@ -12,10 +13,10 @@ class CustomDrawer extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: const <Widget>[
           SizedBox(
-            height : 100.0,
+            height : 90.0,
             child: DrawerHeader(
               decoration: BoxDecoration(
-                color: Colors.amberAccent,
+                color: Enum.firstColor,
               ),
               child: Text(
                 'Меню',

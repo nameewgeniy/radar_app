@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:radar/api/api.dart';
+import 'package:radar/enum/enum.dart';
 import 'package:radar/models/FundState.dart';
 import 'package:radar/pages/pages.dart';
 import 'package:radar/routes/routes.dart';
@@ -11,6 +12,9 @@ import 'package:radar/routes/routes.dart';
 void main() => runApp(GetMaterialApp(
   getPages: Pages.pages,
   initialRoute: Routes.initial,
+  theme: ThemeData(
+    primaryColor: Enum.firstColor,
+  ),
 ));
 
 class MainController extends GetxController{
@@ -39,11 +43,7 @@ class MainController extends GetxController{
       {
         "percent": "4.19",
         "title": "Ценные бумаги РФ"
-      },
-      {
-        "percent": "2.04",
-        "title": "Муниципальные ценные бумаги"
-      },
+      }
     ];
 
     fundsState.assignAll(

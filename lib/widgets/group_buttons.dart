@@ -17,7 +17,7 @@ class GroupButtons extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.only(left: 10, top: 10, bottom: 10),
         child: Container(
-          height: 50,
+          height: 40,
           child: ListView(
             scrollDirection: Axis.horizontal,
             children: [

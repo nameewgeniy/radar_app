@@ -8,11 +8,9 @@ class Circulars extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    var width = MediaQuery.of(context).size.width;
     final c = Get.find<MainController>();
 
     return Container(
-      width: width,
       child: Obx(() => Wrap(
         alignment: WrapAlignment.spaceBetween,
         children: c.fundsState.map((e) {
@@ -35,15 +33,15 @@ class Circular extends StatelessWidget {
     var width = MediaQuery.of(context).size.width;
 
     return Container(
-      width: 195,
+      width: width/2.2,
       padding: const EdgeInsets.only(bottom: 10),
-      child: Wrap(
-        alignment: WrapAlignment.start,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Padding(
             padding: const EdgeInsets.only(right: 10),
             child: CircularPercentIndicator(
-              radius: 70.0,
+              radius: 80.0,
               center: Text(
                 "${percent.toInt()}%",
                 textAlign: TextAlign.left,
@@ -57,11 +55,10 @@ class Circular extends StatelessWidget {
           Container(
             padding: const EdgeInsets.only(right: 10),
             child: Container(
-              constraints: BoxConstraints(
-                  maxWidth: 95
-              ),
+              padding: EdgeInsets.only(top: 5),
               child: Text(
                 "${title}",
+                textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 13, color: Colors.grey),
               ),
             )),
