@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:radar/main.dart';
 import 'package:radar/widgets/bottom_bar.dart';
-import 'package:radar/widgets/chart/chart.dart';
 import 'package:radar/widgets/custom_drawer.dart';
+import 'package:radar/widgets/select_fund.dart';
 
 class AssetsPage extends StatelessWidget {
   @override
@@ -24,10 +24,10 @@ class AssetsPage extends StatelessWidget {
           color: Colors.white,
           child: Column(children: <Widget>[
             Padding(
-              padding: const EdgeInsets.only(top: 30),
+              padding: const EdgeInsets.only(top: 5),
               child: Container(
                   height: 200,
-                  child: PieOutsideLabelChart.withSampleData()
+                  child: SelectFund()
               ),
             )
           ]),

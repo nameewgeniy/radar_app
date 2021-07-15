@@ -33,7 +33,7 @@ class BottomBar extends StatelessWidget {
               MaterialCommunityIcons.home_variant, "Главная", width, Routes.initial
           ),
           BottomBarItem(
-              MaterialCommunityIcons.chart_bar, "Акции", width, Routes.assets
+              MaterialCommunityIcons.chart_bar, "Фонды", width, Routes.assets
           ),
         ]
       )

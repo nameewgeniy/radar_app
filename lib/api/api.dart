@@ -5,7 +5,7 @@ import 'package:dio/dio.dart';
 
 Dio apiDio = Dio();
 
-class Api  {
+class Api {
 
   Future get({
     @required String method,
@@ -21,13 +21,17 @@ class Api  {
         ),
       );
       if (response.statusCode == 200) {
-        return response.data['Data'];
+        return response.data["Data"];
       }
 
       throw response;
-
     } catch (error) {
       throw error;
     }
   }
+
+  Future fetchFunds() async {
+    return await Api().get(method: "http://192.168.0.107:9667/api/GetAllFunds");
+  }
+
 }
