@@ -1,16 +1,12 @@
 // To parse this JSON data, do
 //
-//     final fund = fundFromJson(jsonString);
+//     final fund = fundFromMap(jsonString);
 
 import 'dart:convert';
 
-Fund fundFromJson(String str) => Fund.fromJson(json.decode(str));
+Fund fundFromMap(String str) => Fund.fromMap(json.decode(str));
 
-List<Fund> fundsFromJson(String str) {
-  json.decode(str).map((e) => Fund.fromJson(e)).toList();
-}
-
-String fundToJson(Fund data) => json.encode(data.toJson());
+String fundToMap(Fund data) => json.encode(data.toMap());
 
 class Fund {
   Fund({
@@ -83,79 +79,75 @@ class Fund {
   String feeUk;
   String isinCode;
 
-  factory Fund.fromJson(Map<String, dynamic> json) => Fund(
-        id: json["ID"],
-        createdAt: DateTime.parse(json["CreatedAt"]),
-        updatedAt: DateTime.parse(json["UpdatedAt"]),
-        deletedAt: json["DeletedAt"],
-        fundId: json["id"],
-        auditorId: json["auditor_id"],
-        fundsObjectNameRus: json["funds_object_name_rus"],
-        dateOfEndPlacing: DateTime.parse(json["date_of_end_placing"]),
-        dateOfStartPlacing: DateTime.parse(json["date_of_start_placing"]),
-        kodMicex: json["kod_micex"],
-        fundsCompId: json["funds_comp_id"],
-        fundsCompNameRus: json["funds_comp_name_rus"],
-        mmvbPlacement: json["mmvb_placement"],
-        moreEng: json["more_eng"],
-        moreRus: json["more_rus"],
-        nameEng: json["name_eng"],
-        nameRus: json["name_rus"],
-        qualifiedOnly: json["qualified_only"],
-        recorderId: json["recorder_id"],
-        registrationDate: DateTime.parse(json["registration_date"]),
-        regNumber: json["reg_number"],
-        repositoryId: json["repository_id"],
-        rtsPlacement: json["rts_placement"],
-        specializationId: json["specialization_id"],
-        specializationNameEng: json["specialization_name_eng"],
-        specializationNameRus: json["specialization_name_rus"],
-        fundsStatusesId: json["funds_statuses_id"],
-        fundsTypesRus: json["funds_types_rus"],
-        updatingDate: DateTime.parse(json["updating_date"]),
-        fundsCategoriesId: json["funds_categories_id"],
-        fundsCategoriesTitleRus: json["funds_categories_title_rus"],
-        feeUk: json["fee_uk"],
-        isinCode: json["isin_code"],
-      );
+  factory Fund.fromMap(Map<String, dynamic> json) => Fund(
+    id: json["ID"] == null ? null : json["ID"],
+    createdAt: json["CreatedAt"] == null ? null : DateTime.parse(json["CreatedAt"]),
+    updatedAt: json["UpdatedAt"] == null ? null : DateTime.parse(json["UpdatedAt"]),
+    deletedAt: json["DeletedAt"],
+    fundId: json["id"] == null ? null : json["id"],
+    auditorId: json["auditor_id"] == null ? null : json["auditor_id"],
+    fundsObjectNameRus: json["funds_object_name_rus"] == null ? null : json["funds_object_name_rus"],
+    dateOfEndPlacing: json["date_of_end_placing"] == null ? null : DateTime.parse(json["date_of_end_placing"]),
+    dateOfStartPlacing: json["date_of_start_placing"] == null ? null : DateTime.parse(json["date_of_start_placing"]),
+    kodMicex: json["kod_micex"] == null ? null : json["kod_micex"],
+    fundsCompId: json["funds_comp_id"] == null ? null : json["funds_comp_id"],
+    fundsCompNameRus: json["funds_comp_name_rus"] == null ? null : json["funds_comp_name_rus"],
+    mmvbPlacement: json["mmvb_placement"] == null ? null : json["mmvb_placement"],
+    moreEng: json["more_eng"] == null ? null : json["more_eng"],
+    moreRus: json["more_rus"] == null ? null : json["more_rus"],
+    nameEng: json["name_eng"] == null ? null : json["name_eng"],
+    nameRus: json["name_rus"] == null ? null : json["name_rus"],
+    qualifiedOnly: json["qualified_only"] == null ? null : json["qualified_only"],
+    recorderId: json["recorder_id"] == null ? null : json["recorder_id"],
+    registrationDate: json["registration_date"] == null ? null : DateTime.parse(json["registration_date"]),
+    regNumber: json["reg_number"] == null ? null : json["reg_number"],
+    repositoryId: json["repository_id"] == null ? null : json["repository_id"],
+    rtsPlacement: json["rts_placement"] == null ? null : json["rts_placement"],
+    specializationId: json["specialization_id"] == null ? null : json["specialization_id"],
+    specializationNameEng: json["specialization_name_eng"] == null ? null : json["specialization_name_eng"],
+    specializationNameRus: json["specialization_name_rus"] == null ? null : json["specialization_name_rus"],
+    fundsStatusesId: json["funds_statuses_id"] == null ? null : json["funds_statuses_id"],
+    fundsTypesRus: json["funds_types_rus"] == null ? null : json["funds_types_rus"],
+    updatingDate: json["updating_date"] == null ? null : DateTime.parse(json["updating_date"]),
+    fundsCategoriesId: json["funds_categories_id"] == null ? null : json["funds_categories_id"],
+    fundsCategoriesTitleRus: json["funds_categories_title_rus"] == null ? null : json["funds_categories_title_rus"],
+    feeUk: json["fee_uk"] == null ? null : json["fee_uk"],
+    isinCode: json["isin_code"] == null ? null : json["isin_code"],
+  );
 
-  Map<String, dynamic> toJson() => {
-        "ID": id,
-        "CreatedAt": createdAt.toIso8601String(),
-        "UpdatedAt": updatedAt.toIso8601String(),
-        "DeletedAt": deletedAt,
-        "id": fundId,
-        "auditor_id": auditorId,
-        "funds_object_name_rus": fundsObjectNameRus,
-        "date_of_end_placing":
-            "${dateOfEndPlacing.year.toString().padLeft(4, '0')}-${dateOfEndPlacing.month.toString().padLeft(2, '0')}-${dateOfEndPlacing.day.toString().padLeft(2, '0')}",
-        "date_of_start_placing":
-            "${dateOfStartPlacing.year.toString().padLeft(4, '0')}-${dateOfStartPlacing.month.toString().padLeft(2, '0')}-${dateOfStartPlacing.day.toString().padLeft(2, '0')}",
-        "kod_micex": kodMicex,
-        "funds_comp_id": fundsCompId,
-        "funds_comp_name_rus": fundsCompNameRus,
-        "mmvb_placement": mmvbPlacement,
-        "more_eng": moreEng,
-        "more_rus": moreRus,
-        "name_eng": nameEng,
-        "name_rus": nameRus,
-        "qualified_only": qualifiedOnly,
-        "recorder_id": recorderId,
-        "registration_date":
-            "${registrationDate.year.toString().padLeft(4, '0')}-${registrationDate.month.toString().padLeft(2, '0')}-${registrationDate.day.toString().padLeft(2, '0')}",
-        "reg_number": regNumber,
-        "repository_id": repositoryId,
-        "rts_placement": rtsPlacement,
-        "specialization_id": specializationId,
-        "specialization_name_eng": specializationNameEng,
-        "specialization_name_rus": specializationNameRus,
-        "funds_statuses_id": fundsStatusesId,
-        "funds_types_rus": fundsTypesRus,
-        "updating_date":
-            "${updatingDate.year.toString().padLeft(4, '0')}-${updatingDate.month.toString().padLeft(2, '0')}-${updatingDate.day.toString().padLeft(2, '0')}",
-        "funds_categories_id": fundsCategoriesId,
-        "funds_categories_title_rus": fundsCategoriesTitleRus,
-        "fee_uk": feeUk,
-        "isin_code": isinCode,
-      };
+  Map<String, dynamic> toMap() => {
+    "ID": id == null ? null : id,
+    "CreatedAt": createdAt == null ? null : createdAt.toIso8601String(),
+    "UpdatedAt": updatedAt == null ? null : updatedAt.toIso8601String(),
+    "DeletedAt": deletedAt,
+    "id": fundId == null ? null : fundId,
+    "auditor_id": auditorId == null ? null : auditorId,
+    "funds_object_name_rus": fundsObjectNameRus == null ? null : fundsObjectNameRus,
+    "date_of_end_placing": dateOfEndPlacing == null ? null : "${dateOfEndPlacing.year.toString().padLeft(4, '0')}-${dateOfEndPlacing.month.toString().padLeft(2, '0')}-${dateOfEndPlacing.day.toString().padLeft(2, '0')}",
+    "date_of_start_placing": dateOfStartPlacing == null ? null : "${dateOfStartPlacing.year.toString().padLeft(4, '0')}-${dateOfStartPlacing.month.toString().padLeft(2, '0')}-${dateOfStartPlacing.day.toString().padLeft(2, '0')}",
+    "kod_micex": kodMicex == null ? null : kodMicex,
+    "funds_comp_id": fundsCompId == null ? null : fundsCompId,
+    "funds_comp_name_rus": fundsCompNameRus == null ? null : fundsCompNameRus,
+    "mmvb_placement": mmvbPlacement == null ? null : mmvbPlacement,
+    "more_eng": moreEng == null ? null : moreEng,
+    "more_rus": moreRus == null ? null : moreRus,
+    "name_eng": nameEng == null ? null : nameEng,
+    "name_rus": nameRus == null ? null : nameRus,
+    "qualified_only": qualifiedOnly == null ? null : qualifiedOnly,
+    "recorder_id": recorderId == null ? null : recorderId,
+    "registration_date": registrationDate == null ? null : "${registrationDate.year.toString().padLeft(4, '0')}-${registrationDate.month.toString().padLeft(2, '0')}-${registrationDate.day.toString().padLeft(2, '0')}",
+    "reg_number": regNumber == null ? null : regNumber,
+    "repository_id": repositoryId == null ? null : repositoryId,
+    "rts_placement": rtsPlacement == null ? null : rtsPlacement,
+    "specialization_id": specializationId == null ? null : specializationId,
+    "specialization_name_eng": specializationNameEng == null ? null : specializationNameEng,
+    "specialization_name_rus": specializationNameRus == null ? null : specializationNameRus,
+    "funds_statuses_id": fundsStatusesId == null ? null : fundsStatusesId,
+    "funds_types_rus": fundsTypesRus == null ? null : fundsTypesRus,
+    "updating_date": updatingDate == null ? null : "${updatingDate.year.toString().padLeft(4, '0')}-${updatingDate.month.toString().padLeft(2, '0')}-${updatingDate.day.toString().padLeft(2, '0')}",
+    "funds_categories_id": fundsCategoriesId == null ? null : fundsCategoriesId,
+    "funds_categories_title_rus": fundsCategoriesTitleRus == null ? null : fundsCategoriesTitleRus,
+    "fee_uk": feeUk == null ? null : feeUk,
+    "isin_code": isinCode == null ? null : isinCode,
+  };
 }

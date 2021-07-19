@@ -1,12 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:radar/enum/enum.dart';
-import 'package:radar/main.dart';
+import 'package:radar/pages/funds/widgets/list_funds.dart';
+import 'package:radar/routes/routes.dart';
 import 'package:radar/widgets/bottom_bar.dart';
-import 'package:radar/widgets/chart/chart.dart';
 import 'package:radar/widgets/chart/circulars.dart';
-import 'package:radar/widgets/chart/horizontal.dart';
 import 'package:radar/widgets/custom_drawer.dart';
 import 'package:radar/widgets/group_buttons.dart';
 import 'package:radar/widgets/header_title.dart';
@@ -16,8 +14,6 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    final MainController c = Get.find<MainController>();
-
     return Material(
       clipBehavior: Clip.antiAliasWithSaveLayer,
       child: Scaffold(
@@ -26,43 +22,58 @@ class HomePage extends StatelessWidget {
           centerTitle: true,
         ),
         drawer: CustomDrawer(),
-        resizeToAvoidBottomPadding: false,
         body: Container(
           color: Colors.white,
           child: Column(children: <Widget>[
             Padding(
-              padding: const EdgeInsets.only(left:20, top: 10, bottom: 10, right: 0),
+              padding: const EdgeInsets.only(left:5, top: 10),
               child: GroupButtons(),
             ),
             Expanded(
               child: ListView(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(left:20, top: 5, bottom: 5, right: 0),
+                    padding: const EdgeInsets.only(left:10, top: 15, bottom: 15),
                     child: HeaderTitle(
                       text: "Ценные бумаги",
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 10, top: 10, bottom: 10, right: 10),
+                    padding: const EdgeInsets.only(left: 5, right: 10),
                     child: Circulars(),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left:20, top: 5, bottom: 5, right: 0),
+                    padding: const EdgeInsets.only(left: 10, top: 15, bottom: 15),
                     child: HeaderTitle(
                       text: "Отрасли",
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left:20, top: 5, bottom: 0, right: 20),
+                    padding: const EdgeInsets.only(left:15, right: 20),
                     child: ListFundState(),
                   ),
                   Padding(
+                    padding: const EdgeInsets.only(left:10, top: 15, bottom: 15),
+                    child: HeaderTitle(
+                      text: "Фонды",
+                    ),
+                  ),
+                  Padding(
                     padding: const EdgeInsets.only(top: 0),
-                    child: Obx(() => Container(
-                        height: 200,
-                        child: HorizontalBarLabelChart.withSampleData()
-                    )),
+                    child: Container(
+                      color: Colors.white,
+                      child: Column(children: <Widget>[
+                        Container(
+                          child: HomeFundsList(),
+                        ),
+                        Container(
+                          child: TextButton(
+                            onPressed: () => {Get.toNamed(Routes.funds)},
+                            child: Text("Все фонды"),
+                          ),
+                        )
+                      ])
+                    ),
                   ),
                 ],
               ),

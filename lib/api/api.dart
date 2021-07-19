@@ -14,7 +14,7 @@ class Api {
     try {
       Map<String, dynamic> headers = {};
       final Response response = await apiDio.get(
-        method,
+        "http://109.68.190.168:9667" + method,
         queryParameters: queryParameters,
         options: Options(
           headers: headers,
@@ -31,7 +31,18 @@ class Api {
   }
 
   Future fetchFunds() async {
-    return await Api().get(method: "http://192.168.0.107:9667/api/GetAllFunds");
+    return await Api().get(method: "/api/GetAllFunds");
   }
 
+  Future fetchAssetsByFund(id) async {
+    return await Api().get(method: "/api/assets-by-fund/$id");
+  }
+
+  Future fetchAssetsTypes() async {
+    return await Api().get(method: "/api/assets/type");
+  }
+
+  Future fetchBranch() async {
+    return await Api().get(method: "/api/branch");
+  }
 }

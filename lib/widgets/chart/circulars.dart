@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
@@ -13,8 +15,8 @@ class Circulars extends StatelessWidget {
     return Container(
       child: Obx(() => Wrap(
         alignment: WrapAlignment.spaceBetween,
-        children: c.fundsState.map((e) {
-            return Circular(e.percent, e.title);
+        children: c.assetsTypes.map((e) {
+            return Circular(e.percent, c.getLabelTypeByValue(e.title));
           }).toList()
       )),
     );
@@ -41,14 +43,23 @@ class Circular extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(right: 10),
             child: CircularPercentIndicator(
-              radius: 80.0,
-              center: Text(
-                "${percent.toInt()}%",
-                textAlign: TextAlign.left,
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              radius: 90.0,
+              center: Wrap(
+                children: [
+                  Text(
+                    "${percent.ceil()}%",
+                    textAlign: TextAlign.left,
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    Random().nextDouble().toStringAsFixed(2) + "%",
+                    textAlign: TextAlign.left,
+                    style: TextStyle(fontSize: 11, fontWeight: FontWeight.w300),
+                  ),
+                ],
               ),
               lineWidth: 8.0,
-              percent: percent / 100,
+              percent: percent/100,
               progressColor: Color.fromARGB(255, 215, 66, 54),
             ),
           ),

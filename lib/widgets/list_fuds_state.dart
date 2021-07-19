@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:radar/main.dart';
 
@@ -10,8 +13,11 @@ class ListFundState extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: Obx(() => Column(
-        children: c.fundsStateList.map(
-            (element) => ListFundStateItem(element.title, element.percent)
+        children: c.branches.map(
+            (e) => Container(
+                height: 40,
+                child: ListFundStateItem(e.title, e.percent)
+            )
         ).toList()
       )),
     );
@@ -28,23 +34,22 @@ class ListFundStateItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.only(top: 10),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return ListTile(
+      dense:true,
+      contentPadding: EdgeInsets.only(left: 0.0, right: 0.0, top: 0, bottom: 0),
+      title: Text(
+        "${text}",
+        style: TextStyle(fontSize: 14, color: Colors.grey),
+      ),
+      trailing: Column(
         children: [
           Text(
-            "${text}",
-            style: TextStyle(
-              fontSize: 16,
-              color: Colors.grey
-            ),
+            "${percent}%",
+            style: TextStyle(fontWeight: FontWeight.bold),
           ),
           Text(
-            "${percent}%",
-            style: TextStyle(
-              fontWeight: FontWeight.bold
-            ),
+            Random().nextDouble().toStringAsFixed(2) + "%",
+            style: TextStyle(fontWeight: FontWeight.w300, fontSize: 10),
           ),
         ],
       ),

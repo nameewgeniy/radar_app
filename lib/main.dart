@@ -1,13 +1,16 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:radar/api/api.dart';
 import 'package:radar/enum/enum.dart';
+import 'package:radar/models/Branch.dart';
 import 'package:radar/models/Fund.dart';
-import 'package:radar/models/FundState.dart';
+import 'package:radar/models/AssetsType.dart';
+import 'package:radar/models/Period.dart';
+import 'package:radar/pages/funds/widgets/chart.dart';
 import 'package:radar/pages/pages.dart';
 import 'package:radar/routes/routes.dart';
 
@@ -20,14 +23,77 @@ void main() => runApp(GetMaterialApp(
     ));
 
 class MainController extends GetxController {
-  var isSelected = <bool>[false, false, false, false, false, false].obs;
-  var currentDateIndex = 1.obs;
 
-  var fundsState = List<FundState>().obs;
-  var fundsStateList = List<FundState>().obs;
-  var selectedFund = "Выберите фонд".obs;
-  var selectedFundId = "".obs;
-  var allFunds = List().obs;
+  var types = [
+    {
+      "value": "stock",
+      "label": "Акции",
+    },
+    {
+      "value": "etf",
+      "label": "ETF",
+    },
+    {
+      "value": "bond",
+      "label": "Облигации",
+    },
+    {
+      "value": "foreign_stock",
+      "label": "Иностранные акции",
+    },
+  ];
+
+  var assetsTypes = <AssetsType>[].obs;
+  var branches = <Branch>[].obs;
+  var selectedFund = Fund().obs;
+  var selectedMoreItems = <Map>[].obs;
+  var selectedFundId = 0.obs;
+  var allFunds = [].obs;
+  var assetsFund = [].obs;
+
+  var homeDatePeriod = <Period>[
+    Period(label: "1 мес.", value: 1, isActive: false),
+    Period(label: "3 мес.", value: 3, isActive: false),
+    Period(label: "6 мес.", value: 6, isActive: false),
+    Period(label: "Год", value: 12, isActive: false),
+    Period(label: "Весь", value: 0, isActive: false),
+  ].obs;
+
+  var selectedHomeDatePeriod = Period().obs;
+
+  var assetsPeriod = <Period>[
+    Period(label: "1 мес.", value: 1, isActive: false),
+    Period(label: "3 мес.", value: 3, isActive: false),
+    Period(label: "6 мес.", value: 6, isActive: false),
+    Period(label: "Год", value: 12, isActive: false),
+    Period(label: "Весь", value: 0, isActive: false),
+  ].obs;
+
+  var selectedAssetsPeriod = Period().obs;
+
+  var graphPeriod = <Period>[
+    Period(label: "1 мес.", value: 1, isActive: false),
+    Period(label: "3 мес.", value: 3, isActive: false),
+    Period(label: "6 мес.", value: 6, isActive: false),
+    Period(label: "Год", value: 12, isActive: false),
+    Period(label: "Весь", value: 0, isActive: false),
+  ].obs;
+
+  var selectedGraphPeriod = Period().obs;
+
+  var graphItems = <GraphRow>[
+    new GraphRow(new DateTime(2020, 1, 25), Random().nextInt(100).toInt()),
+    new GraphRow(new DateTime(2020, 2, 26), Random().nextInt(100).toInt()),
+    new GraphRow(new DateTime(2020, 3, 27), Random().nextInt(100).toInt()),
+    new GraphRow(new DateTime(2020, 4, 28), Random().nextInt(100).toInt()),
+    new GraphRow(new DateTime(2020, 5, 29), Random().nextInt(100).toInt()),
+    new GraphRow(new DateTime(2020, 6, 30), Random().nextInt(100).toInt()),
+    new GraphRow(new DateTime(2021, 1, 01), Random().nextInt(100).toInt()),
+    new GraphRow(new DateTime(2021, 2, 02), Random().nextInt(100).toInt()),
+    new GraphRow(new DateTime(2021, 3, 03), Random().nextInt(100).toInt()),
+    new GraphRow(new DateTime(2021, 4, 04), Random().nextInt(100).toInt()),
+    new GraphRow(new DateTime(2021, 5, 05), Random().nextInt(100).toInt()),
+  ].obs;
 
   @override
   void onInit() {
@@ -36,50 +102,112 @@ class MainController extends GetxController {
   }
 
   MainController() {
-    var data = <Map>[
-      {"percent": "70.47", "title": "Акции"},
-      {"percent": "17.62", "title": "Корпоративные облигации"},
-      {"percent": "5.68", "title": "Денежные средства"},
-      {"percent": "4.19", "title": "Ценные бумаги РФ"}
-    ];
 
-    fundsState.assignAll(data.map((e) => FundState.fromJson(e)));
+    loadAssetsTypes();
+    loadBranch(false);
+    selectGraph(1);
+    selectAssetsPeriod(1);
+    selectHomePeriod(1);
+  }
 
-    fundsStateList.assignAll(data.map((e) => FundState.fromJson(e)));
+  selectGraph(value) {
+    selectedGraphPeriod.value = graphPeriod.firstWhere((e) => (e.value == value));
+
+    graphItems.assignAll([
+      new GraphRow(new DateTime(2020, 1, 25), Random().nextInt(100).toInt()),
+      new GraphRow(new DateTime(2020, 2, 26), Random().nextInt(100).toInt()),
+      new GraphRow(new DateTime(2020, 3, 27), Random().nextInt(100).toInt()),
+      new GraphRow(new DateTime(2020, 4, 28), Random().nextInt(100).toInt()),
+      new GraphRow(new DateTime(2020, 5, 29), Random().nextInt(100).toInt()),
+      new GraphRow(new DateTime(2020, 6, 30), Random().nextInt(100).toInt()),
+      new GraphRow(new DateTime(2021, 1, 01), Random().nextInt(100).toInt()),
+      new GraphRow(new DateTime(2021, 2, 02), Random().nextInt(100).toInt()),
+      new GraphRow(new DateTime(2021, 3, 03), Random().nextInt(100).toInt()),
+      new GraphRow(new DateTime(2021, 4, 04), Random().nextInt(100).toInt()),
+      new GraphRow(new DateTime(2021, 5, 05), Random().nextInt(100).toInt()),
+    ]);
+  }
+
+  selectAssetsPeriod(value) {
+    selectedAssetsPeriod.value = assetsPeriod.firstWhere((e) => (e.value == value));
+  }
+
+  selectHomePeriod(value) {
+    selectedHomeDatePeriod.value = homeDatePeriod.firstWhere((e) => (e.value == value));
+    loadAssetsTypes();
+    loadBranch(true);
   }
 
   loadAllFunds() async {
     var response = await Api().fetchFunds();
     allFunds.assignAll(response);
+  }
 
-    if (allFunds.isNotEmpty) {
-      selectedFundId.value = allFunds.value[0]["id"];
-      selectedFund.value = allFunds.value[0]["funds_comp_name_rus"];
+  loadAssetsByFundId(id) async {
+    var response = await Api().fetchAssetsByFund(id);
+    assetsFund.assignAll(response);
+  }
+
+  loadAssetsTypes() async {
+    var response = await Api().fetchAssetsTypes();
+    assetsTypes.clear();
+    response.forEach((element) =>
+        assetsTypes.add(AssetsType.fromMap(element))
+    );
+  }
+
+  loadBranch(bool chunk) async {
+    var response = await Api().fetchBranch();
+    branches.clear();
+    response.forEach((element) =>
+        branches.add(Branch.fromMap(element))
+    );
+
+    if (chunk) {
+      branches.assignAll(branches.getRange(0, 5 + Random().nextInt(5)).toList());
     }
+  }
+
+  getLabelTypeByValue(value) {
+    return types.firstWhere((element) => element["value"] == value)["label"];
   }
 
   selectFund(id) {
-    var data = allFunds.value.where((e) => (e["id"].contains(id)));
-
+    print(id);
+    var data = allFunds.where((e) => (e["ID"] == id));
     if (data.length > 0) {
-      selectedFund.value = data.first["funds_comp_name_rus"];
-      selectedFundId.value = data.first["id"];
+      selectedFund.value = Fund.fromMap(data.first);
+
+      selectedMoreItems.clear();
+
+      if (selectedFund.value.fundsCompNameRus != null) {
+        selectedMoreItems.add({
+          "name": "Компания",
+          "value": selectedFund.value.fundsCompNameRus
+        });
+      }
+
+      if (selectedFund.value.fundsTypesRus != null) {
+        selectedMoreItems.add({
+          "name": "Тип фонда",
+          "value": selectedFund.value.fundsTypesRus
+        });
+      }
+
+      if (selectedFund.value.fundsObjectNameRus != null) {
+        selectedMoreItems.add({
+          "name": "Тип активов",
+          "value": selectedFund.value.fundsObjectNameRus
+        });
+      }
+
+      if (selectedFund.value.registrationDate != null) {
+        selectedMoreItems.add({
+          "name": "Дата открытия",
+          "value": selectedFund.value.registrationDate.toString().split(" ").first
+        });
+      }
+
     }
   }
-
-  selectedDate(index) async {
-    currentDateIndex.value = index;
-
-    var response =
-        await Api().get(method: "http://192.168.0.107:9667/api/GetStateAssets");
-
-    print(response[0]);
-    //response.forEach((k,v) => print('${k}: ${v}'));
-
-    var fund = FundState.fromJson(response[0]);
-
-    fundsState.add(fund);
-  }
-
-  searchListeneer(string) {}
 }

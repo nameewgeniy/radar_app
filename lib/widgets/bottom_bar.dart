@@ -11,7 +11,7 @@ class BottomBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    final width = MediaQuery.of(context).size.width / Pages.pages.length;
+    final width = MediaQuery.of(context).size.width / 3;
 
     return Container(
       width: double.infinity,
@@ -33,7 +33,10 @@ class BottomBar extends StatelessWidget {
               MaterialCommunityIcons.home_variant, "Главная", width, Routes.initial
           ),
           BottomBarItem(
-              MaterialCommunityIcons.chart_bar, "Фонды", width, Routes.assets
+              MaterialCommunityIcons.chart_bar, "Фонды", width, Routes.funds
+          ),
+          BottomBarItem(
+              MaterialCommunityIcons.chart_areaspline, "Активы", width, Routes.assets
           ),
         ]
       )
@@ -65,7 +68,7 @@ class BottomBarItem extends StatelessWidget {
       height: double.infinity,
       child: FlatButton(
         onPressed: () {
-          Get.toNamed(route);
+          Get.offAllNamed(route);
           return true;
         },
         child: Center(

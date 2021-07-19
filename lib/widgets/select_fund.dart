@@ -43,9 +43,9 @@ class SelectFundList extends StatelessWidget {
           ),
         ],
       ),
-      child: ListView(
+      child: Obx(() => ListView(
         children: c.allFunds.map((e) => SelectFundListItem(e["funds_comp_name_rus"], e["id"])).toList(),
-      ),
+      )),
     );
   }
 }
