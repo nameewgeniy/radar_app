@@ -39,17 +39,17 @@ class HomePage extends StatelessWidget {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 5, right: 10),
+                    padding: const EdgeInsets.only(left: 10, right: 10),
                     child: Circulars(),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 10, top: 15, bottom: 15),
+                    padding: const EdgeInsets.only(left: 10, top: 15, bottom: 5),
                     child: HeaderTitle(
                       text: "Отрасли",
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left:15, right: 20),
+                    padding: const EdgeInsets.only(left:10, right: 20),
                     child: ListFundState(),
                   ),
                   Padding(

@@ -68,7 +68,7 @@ class BottomBarItem extends StatelessWidget {
       height: double.infinity,
       child: FlatButton(
         onPressed: () {
-          Get.offAllNamed(route);
+          Get.toNamed(route);
           return true;
         },
         child: Center(
