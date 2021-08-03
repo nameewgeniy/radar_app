@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:radar/api/api.dart';
 import 'package:radar/enum/enum.dart';
-import 'package:radar/models/Branch.dart';
 import 'package:radar/models/Fund.dart';
 import 'package:radar/models/AssetsType.dart';
 import 'package:radar/models/Period.dart';
@@ -43,16 +42,16 @@ class MainController extends GetxController {
     },
   ];
 
-  var assetsTypes = <AssetsType>[].obs;
-  var branches = <Branch>[].obs;
+  var fundsStructure = <FundStructure>[].obs;
+  var branches = <FundStructure>[].obs;
   var selectedFund = Fund().obs;
   var selectedMoreItems = <Map>[].obs;
   var selectedFundId = 0.obs;
   var allFunds = [].obs;
   var assetsFund = [].obs;
+  var sumAmount = 500000.0.obs;
 
   var homeDatePeriod = <Period>[
-    Period(label: "1 мес.", value: 1, isActive: false),
     Period(label: "3 мес.", value: 3, isActive: false),
     Period(label: "6 мес.", value: 6, isActive: false),
     Period(label: "Год", value: 12, isActive: false),
@@ -103,11 +102,13 @@ class MainController extends GetxController {
 
   MainController() {
 
-    loadAssetsTypes();
-    loadBranch(false);
+    selectHomePeriod(3);
+
+    loadFundsStructure();
+    loadBranch();
+
     selectGraph(1);
     selectAssetsPeriod(1);
-    selectHomePeriod(1);
   }
 
   selectGraph(value) {
@@ -134,8 +135,8 @@ class MainController extends GetxController {
 
   selectHomePeriod(value) {
     selectedHomeDatePeriod.value = homeDatePeriod.firstWhere((e) => (e.value == value));
-    loadAssetsTypes();
-    loadBranch(true);
+    loadFundsStructure();
+    loadBranch();
   }
 
   loadAllFunds() async {
@@ -148,24 +149,29 @@ class MainController extends GetxController {
     assetsFund.assignAll(response);
   }
 
-  loadAssetsTypes() async {
-    var response = await Api().fetchAssetsTypes();
-    assetsTypes.clear();
-    response.forEach((element) =>
-        assetsTypes.add(AssetsType.fromMap(element))
-    );
+  loadFundsStructure() async {
+    var response = await Api().fetchFundsStructure(selectedHomeDatePeriod.value.value);
+
+    fundsStructure.clear();
+    sumAmount.value = 0.0;
+
+    var i = 0;
+    response.forEach((element) {
+      var item = FundStructure.fromMap(element);
+
+      item.color = FundStructureColors[i++];
+
+      fundsStructure.add(item);
+      sumAmount.value += item.amount;
+    });
   }
 
-  loadBranch(bool chunk) async {
-    var response = await Api().fetchBranch();
+  loadBranch() async {
+    var response = await Api().fetchBranch(selectedHomeDatePeriod.value.value);
     branches.clear();
     response.forEach((element) =>
-        branches.add(Branch.fromMap(element))
+        branches.add(FundStructure.fromMap(element))
     );
-
-    if (chunk) {
-      branches.assignAll(branches.getRange(0, 5 + Random().nextInt(5)).toList());
-    }
   }
 
   getLabelTypeByValue(value) {
@@ -173,8 +179,8 @@ class MainController extends GetxController {
   }
 
   selectFund(id) {
-    print(id);
     var data = allFunds.where((e) => (e["ID"] == id));
+
     if (data.length > 0) {
       selectedFund.value = Fund.fromMap(data.first);
 

@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:radar/pages/funds/widgets/list_funds.dart';
 import 'package:radar/routes/routes.dart';
 import 'package:radar/widgets/bottom_bar.dart';
-import 'package:radar/widgets/chart/circulars.dart';
+import 'package:radar/widgets/chart/fund_structure.dart';
 import 'package:radar/widgets/custom_drawer.dart';
 import 'package:radar/widgets/group_buttons.dart';
 import 'package:radar/widgets/header_title.dart';
@@ -40,7 +40,7 @@ class HomePage extends StatelessWidget {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 10, right: 10),
-                    child: Circulars(),
+                    child: FundStructure(),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 10, top: 15, bottom: 5),
