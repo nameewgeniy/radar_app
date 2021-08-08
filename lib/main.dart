@@ -1,15 +1,17 @@
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:charts_flutter/flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:radar/api/api.dart';
 import 'package:radar/enum/enum.dart';
 import 'package:radar/models/Fund.dart';
-import 'package:radar/models/AssetsType.dart';
+import 'package:radar/models/FundStructure.dart';
+import 'package:radar/models/FundsStructure.dart';
+import 'package:radar/models/Nav.dart';
 import 'package:radar/models/Period.dart';
-import 'package:radar/pages/funds/widgets/chart.dart';
 import 'package:radar/pages/pages.dart';
 import 'package:radar/routes/routes.dart';
 
@@ -42,57 +44,45 @@ class MainController extends GetxController {
     },
   ];
 
-  var fundsStructure = <FundStructure>[].obs;
-  var branches = <FundStructure>[].obs;
+  var fundsStructure = <FundsStructure>[].obs;
+  var branches = <FundsStructure>[].obs;
   var selectedFund = Fund().obs;
   var selectedMoreItems = <Map>[].obs;
   var selectedFundId = 0.obs;
   var allFunds = [].obs;
-  var assetsFund = [].obs;
+  var assetsFund = <FundStructure>[].obs;
   var sumAmount = 500000.0.obs;
 
   var homeDatePeriod = <Period>[
     Period(label: "3 мес.", value: 3, isActive: false),
     Period(label: "6 мес.", value: 6, isActive: false),
     Period(label: "Год", value: 12, isActive: false),
+    Period(label: "3 года", value: 36, isActive: false),
     Period(label: "Весь", value: 0, isActive: false),
   ].obs;
 
   var selectedHomeDatePeriod = Period().obs;
 
   var assetsPeriod = <Period>[
-    Period(label: "1 мес.", value: 1, isActive: false),
     Period(label: "3 мес.", value: 3, isActive: false),
     Period(label: "6 мес.", value: 6, isActive: false),
     Period(label: "Год", value: 12, isActive: false),
+    Period(label: "3 года", value: 36, isActive: false),
     Period(label: "Весь", value: 0, isActive: false),
   ].obs;
 
   var selectedAssetsPeriod = Period().obs;
 
-  var graphPeriod = <Period>[
-    Period(label: "1 мес.", value: 1, isActive: false),
+  var navPeriod = <Period>[
     Period(label: "3 мес.", value: 3, isActive: false),
     Period(label: "6 мес.", value: 6, isActive: false),
     Period(label: "Год", value: 12, isActive: false),
+    Period(label: "3 года", value: 36, isActive: false),
     Period(label: "Весь", value: 0, isActive: false),
   ].obs;
 
-  var selectedGraphPeriod = Period().obs;
-
-  var graphItems = <GraphRow>[
-    new GraphRow(new DateTime(2020, 1, 25), Random().nextInt(100).toInt()),
-    new GraphRow(new DateTime(2020, 2, 26), Random().nextInt(100).toInt()),
-    new GraphRow(new DateTime(2020, 3, 27), Random().nextInt(100).toInt()),
-    new GraphRow(new DateTime(2020, 4, 28), Random().nextInt(100).toInt()),
-    new GraphRow(new DateTime(2020, 5, 29), Random().nextInt(100).toInt()),
-    new GraphRow(new DateTime(2020, 6, 30), Random().nextInt(100).toInt()),
-    new GraphRow(new DateTime(2021, 1, 01), Random().nextInt(100).toInt()),
-    new GraphRow(new DateTime(2021, 2, 02), Random().nextInt(100).toInt()),
-    new GraphRow(new DateTime(2021, 3, 03), Random().nextInt(100).toInt()),
-    new GraphRow(new DateTime(2021, 4, 04), Random().nextInt(100).toInt()),
-    new GraphRow(new DateTime(2021, 5, 05), Random().nextInt(100).toInt()),
-  ].obs;
+  var selectedNavPeriod = Period().obs;
+  var navItems = <Nav>[].obs;
 
   @override
   void onInit() {
@@ -107,30 +97,18 @@ class MainController extends GetxController {
     loadFundsStructure();
     loadBranch();
 
-    selectGraph(1);
-    selectAssetsPeriod(1);
+    selectNav(0);
+    selectAssetsPeriod(0, null);
   }
 
-  selectGraph(value) {
-    selectedGraphPeriod.value = graphPeriod.firstWhere((e) => (e.value == value));
-
-    graphItems.assignAll([
-      new GraphRow(new DateTime(2020, 1, 25), Random().nextInt(100).toInt()),
-      new GraphRow(new DateTime(2020, 2, 26), Random().nextInt(100).toInt()),
-      new GraphRow(new DateTime(2020, 3, 27), Random().nextInt(100).toInt()),
-      new GraphRow(new DateTime(2020, 4, 28), Random().nextInt(100).toInt()),
-      new GraphRow(new DateTime(2020, 5, 29), Random().nextInt(100).toInt()),
-      new GraphRow(new DateTime(2020, 6, 30), Random().nextInt(100).toInt()),
-      new GraphRow(new DateTime(2021, 1, 01), Random().nextInt(100).toInt()),
-      new GraphRow(new DateTime(2021, 2, 02), Random().nextInt(100).toInt()),
-      new GraphRow(new DateTime(2021, 3, 03), Random().nextInt(100).toInt()),
-      new GraphRow(new DateTime(2021, 4, 04), Random().nextInt(100).toInt()),
-      new GraphRow(new DateTime(2021, 5, 05), Random().nextInt(100).toInt()),
-    ]);
+  selectNav(value) {
+    selectedNavPeriod.value = navPeriod.firstWhere((e) => (e.value == value));
+    loadNav();
   }
 
-  selectAssetsPeriod(value) {
+  selectAssetsPeriod(value, fundId) {
     selectedAssetsPeriod.value = assetsPeriod.firstWhere((e) => (e.value == value));
+    loadAssetsByFundId();
   }
 
   selectHomePeriod(value) {
@@ -144,9 +122,18 @@ class MainController extends GetxController {
     allFunds.assignAll(response);
   }
 
-  loadAssetsByFundId(id) async {
-    var response = await Api().fetchAssetsByFund(id);
-    assetsFund.assignAll(response);
+  loadAssetsByFundId() async {
+    if (selectedAssetsPeriod.value.value != null && selectedFund.value.fundId != null) {
+      var response = await Api().fetchAssetsByFund(selectedFund.value.fundId, selectedAssetsPeriod.value.value);
+
+      assetsFund.clear();
+
+      if (response != null) {
+        response.forEach((element) =>
+            assetsFund.add(FundStructure.fromMap(element))
+        );
+      }
+    }
   }
 
   loadFundsStructure() async {
@@ -157,7 +144,7 @@ class MainController extends GetxController {
 
     var i = 0;
     response.forEach((element) {
-      var item = FundStructure.fromMap(element);
+      var item = FundsStructure.fromMap(element);
 
       item.color = FundStructureColors[i++];
 
@@ -170,8 +157,22 @@ class MainController extends GetxController {
     var response = await Api().fetchBranch(selectedHomeDatePeriod.value.value);
     branches.clear();
     response.forEach((element) =>
-        branches.add(FundStructure.fromMap(element))
+        branches.add(FundsStructure.fromMap(element))
     );
+  }
+
+  loadNav() async {
+    navItems.clear();
+
+    if (selectedFund.value.fundId != null && selectedNavPeriod.value.value != null) {
+      var response = await Api().fetchNavByFundId(selectedFund.value.fundId, selectedNavPeriod.value.value);
+
+      if (response != null) {
+        response.forEach((element) =>
+            navItems.add(Nav.fromMap(element))
+        );
+      }
+    }
   }
 
   getLabelTypeByValue(value) {
@@ -183,6 +184,11 @@ class MainController extends GetxController {
 
     if (data.length > 0) {
       selectedFund.value = Fund.fromMap(data.first);
+
+      // Загрузка графика СЧА
+      navItems.clear();
+      loadNav();
+      loadAssetsByFundId();
 
       selectedMoreItems.clear();
 
@@ -213,7 +219,6 @@ class MainController extends GetxController {
           "value": selectedFund.value.registrationDate.toString().split(" ").first
         });
       }
-
     }
   }
 }

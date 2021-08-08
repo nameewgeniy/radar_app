@@ -3,9 +3,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:radar/main.dart';
-import 'package:radar/routes/routes.dart';
-import 'package:radar/widgets/header_title.dart';
-import 'package:radar/widgets/list_fuds_state.dart';
 
 class FundAssetsList extends StatelessWidget {
   @override
@@ -28,10 +25,10 @@ class FundAssetsList extends StatelessWidget {
               itemBuilder: (context, index) {
                 final item = c.assetsFund[index];
                 return FundAssetsListItem(
-                  item["report_name"],
-                  item["ID"],
-                  item["share"],
-                  Random().nextInt(100).toString(),
+                  item.name,
+                  0,
+                  item.percent,
+                  item.diffPercent,
                 );
               },
             )));
@@ -40,12 +37,12 @@ class FundAssetsList extends StatelessWidget {
 
 class FundAssetsListItem extends StatelessWidget {
   final String text;
-  final String currentPercent;
-  final String deltaPercent;
+  final double currentPercent;
+  final double diffPercent;
   final int id;
 
   FundAssetsListItem(
-      this.text, this.id, this.currentPercent, this.deltaPercent);
+      this.text, this.id, this.currentPercent, this.diffPercent);
 
   @override
   Widget build(BuildContext context) {
@@ -66,10 +63,10 @@ class FundAssetsListItem extends StatelessWidget {
             trailing: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(currentPercent + "%",
+                Text(currentPercent.toString() + "%",
                     style:
                         TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
-                Text(deltaPercent + "%",
+                Text(diffPercent.toString() + "%",
                     style: TextStyle(fontSize: 13, color: Colors.grey)),
               ],
             ),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_conditional_rendering/conditional.dart';
 import 'package:get/get.dart';
 import 'package:radar/main.dart';
 import 'package:radar/pages/funds/widgets/fund_profit.dart';
@@ -16,7 +15,7 @@ class FundPage extends StatelessWidget {
 
     if (Get.arguments["id"] != null) {
       c.selectFund(Get.arguments["id"]);
-      c.loadAssetsByFundId(Get.arguments["id"]);
+      c.loadAssetsByFundId();
     }
 
     return Material(
@@ -102,7 +101,7 @@ class FundPage extends StatelessWidget {
                                     child: BorderButton(
                                         text: e.label,
                                         onPressed: () =>
-                                            {c.selectAssetsPeriod(e.value)},
+                                            {c.selectAssetsPeriod(e.value, Get.arguments["id"])},
                                         isActive: e.value ==
                                             c.selectedAssetsPeriod.value.value),
                                     margin: const EdgeInsets.only(right: 5)))

@@ -15,15 +15,15 @@ class PriceAssets extends StatelessWidget {
       children: [
         Container(
           height: 200,
-          child: Obx(() => TimeSeriesChart(c.graphItems.value, animate: true,)),
+          child: Obx(() => TimeSeriesChart(c.navItems.value, animate: true,)),
         ),
         Container(
           child: Obx(() => Wrap(
               alignment: WrapAlignment.spaceBetween,
-              children: c.graphPeriod
+              children: c.navPeriod
                   .map((e) => Container(
                       child: BorderButton(
-                          text: e.label, onPressed: () => { c.selectGraph(e.value) }, isActive: e.value == c.selectedGraphPeriod.value.value),
+                          text: e.label, onPressed: () => { c.selectNav(e.value) }, isActive: e.value == c.selectedNavPeriod.value.value),
                       margin: const EdgeInsets.only(right: 5)))
                   .toList())),
         )

@@ -36,7 +36,7 @@ class AssetsPage extends StatelessWidget {
                             child: BorderButton(
                                 text: e.label,
                                 onPressed: () =>
-                                {c.selectAssetsPeriod(e.value)},
+                                {},
                                 isActive: e.value ==
                                     c.selectedAssetsPeriod.value.value),
                             margin: const EdgeInsets.only(right: 5)))
