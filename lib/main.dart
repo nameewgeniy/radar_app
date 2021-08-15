@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi';
 import 'dart:math';
 
 import 'package:charts_flutter/flutter.dart';
@@ -50,8 +51,10 @@ class MainController extends GetxController {
   var selectedMoreItems = <Map>[].obs;
   var selectedFundId = 0.obs;
   var allFunds = [].obs;
+  var findFunds = [].obs;
   var assetsFund = <FundStructure>[].obs;
   var sumAmount = 500000.0.obs;
+  var searchFundsKeyword = "".obs;
 
   var homeDatePeriod = <Period>[
     Period(label: "3 мес.", value: 3, isActive: false),
@@ -220,5 +223,14 @@ class MainController extends GetxController {
         });
       }
     }
+  }
+
+  filterFundsByKeywords(value) {
+    searchFundsKeyword.value = value;
+    findFunds.assignAll(
+        allFunds.value.where((element) => element["name_rus"].toString().toUpperCase().indexOf(
+            value.toString().toUpperCase()
+        ) >= 0)
+    );
   }
 }

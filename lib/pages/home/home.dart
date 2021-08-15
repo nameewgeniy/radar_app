@@ -29,6 +29,10 @@ class HomePage extends StatelessWidget {
               padding: const EdgeInsets.only(left:5, top: 10),
               child: GroupButtons(),
             ),
+            TextButton(
+              child: Text("Выбрать фонды"),
+              onPressed: () => { Get.toNamed(Routes.select_funds) },
+            ),
             Expanded(
               child: ListView(
                 children: [

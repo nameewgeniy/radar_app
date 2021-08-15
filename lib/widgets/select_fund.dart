@@ -13,7 +13,7 @@ class SelectFund extends StatelessWidget {
 
     return Column(
       children: [
-        Obx(() => FlatButton(
+        Obx(() => TextButton(
           onPressed: () { Get.bottomSheet(SelectFundList()); },
           child: Text("${c.selectedFund}"),
         )),
