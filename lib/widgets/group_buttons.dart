@@ -25,33 +25,3 @@ class GroupButtons extends StatelessWidget {
   }
 }
 
-class DateButton extends StatelessWidget {
-
-  final Function() onPressed;
-  final String text;
-  final Color color;
-  final Color background;
-  final bool active;
-
-  DateButton({this.onPressed, this.text, this.color, this.background, this.active});
-
-  @override
-  Widget build(BuildContext context) {
-    return !active ? TextButton(
-      onPressed: onPressed,
-      child: Text(text),
-    ) : ElevatedButton(
-      onPressed: onPressed,
-      style: ElevatedButton.styleFrom(
-        elevation: 0,
-        primary: background ?? Color.fromARGB(255, 245, 217, 214),
-        onPrimary: color ?? Color.fromARGB(255, 210, 72, 56),
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(100.0),
-        ),
-      ),
-
-      child: Text(text),
-    );
-  }
-}

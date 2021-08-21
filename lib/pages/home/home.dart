@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:radar/pages/funds/widgets/list_funds.dart';
+import 'package:radar/pages/home/select_fund_button.dart';
 import 'package:radar/routes/routes.dart';
 import 'package:radar/widgets/bottom_bar.dart';
 import 'package:radar/widgets/chart/fund_structure.dart';
@@ -25,19 +26,16 @@ class HomePage extends StatelessWidget {
         body: Container(
           color: Colors.white,
           child: Column(children: <Widget>[
-            Padding(
+         /*   Padding(
               padding: const EdgeInsets.only(left:5, top: 10),
               child: GroupButtons(),
-            ),
-            TextButton(
-              child: Text("Выбрать фонды"),
-              onPressed: () => { Get.toNamed(Routes.select_funds) },
-            ),
+            ),*/
             Expanded(
               child: ListView(
                 children: [
+                  SelectFundButton(),
                   Padding(
-                    padding: const EdgeInsets.only(left:10, top: 15, bottom: 15),
+                    padding: const EdgeInsets.only(left:10, top: 10, bottom: 15),
                     child: HeaderTitle(
                       text: "Ценные бумаги",
                     ),
@@ -59,7 +57,7 @@ class HomePage extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(left:10, top: 15, bottom: 15),
                     child: HeaderTitle(
-                      text: "Фонды",
+                      text: "Избранные фонды",
                     ),
                   ),
                   Padding(
@@ -72,8 +70,8 @@ class HomePage extends StatelessWidget {
                         ),
                         Container(
                           child: TextButton(
-                            onPressed: () => {Get.toNamed(Routes.funds)},
-                            child: Text("Все фонды"),
+                            onPressed: () => {Get.toNamed(Routes.select_funds)},
+                            child: Text("Изменить выбор"),
                           ),
                         )
                       ])

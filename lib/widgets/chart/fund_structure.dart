@@ -69,100 +69,102 @@ class FundStructureItem extends StatelessWidget {
     if (diffPercent > 0) {
       colorPercent = Colors.lightGreen;
     } else if (diffPercent < 0) {
-    colorPercent = Colors.red;
+      colorPercent = Colors.red;
     }
 
     if (diffAmount > 0) {
-    colorAmount = Colors.lightGreen;
+      colorAmount = Colors.lightGreen;
     } else if (diffAmount < 0) {
-    colorAmount = Colors.red;
+      colorAmount = Colors.red;
     }
 
-    return Container(
-      padding: const EdgeInsets.only(bottom: 10),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 10,
-                        height: 10,
-                        color: color,
-                        margin: const EdgeInsets.only(right: 5),
-                      ),
-                      Container(
-                        child: Text(
-                          "$title",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 14, color: Colors.blueGrey),
+    return TextButton(
+      onPressed: () => {},
+      child: Container(
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 10,
+                          height: 10,
+                          color: color,
+                          margin: const EdgeInsets.only(right: 5),
                         ),
+                        Container(
+                          child: Text(
+                            "$title",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: 13, color: Colors.blueGrey),
+                          ),
+                        ),
+                      ],
+                    )),
+                Container(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "$percent%",
+                        textAlign: TextAlign.left,
+                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.blueGrey),
+                      ),
+                      Text(
+                        " / ",
+                        textAlign: TextAlign.left,
+                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.blueGrey),
+                      ),
+                      Text(
+                        oCcy.format(amount) + " руб.",
+                        textAlign: TextAlign.left,
+                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.blueGrey),
                       ),
                     ],
-                  )),
-              Container(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "$percent%",
-                      textAlign: TextAlign.left,
-                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.blueGrey),
-                    ),
-                    Text(
-                      " / ",
-                      textAlign: TextAlign.left,
-                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.blueGrey),
-                    ),
-                    Text(
-                      oCcy.format(amount) + " руб.",
-                      textAlign: TextAlign.left,
-                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.blueGrey),
-                    ),
-                  ],
+                  ),
                 ),
-              ),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                  child: Container(
-                    child: Text(
-                      "динамика",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 12, color: Colors.grey),
-                    ),
-                  )),
-              Container(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "$diffPercent%",
-                      textAlign: TextAlign.left,
-                      style: TextStyle(fontSize: 12, color: colorPercent),
-                    ),
-                    Text(
-                      " / ",
-                      textAlign: TextAlign.left,
-                      style: TextStyle(fontSize: 12, color: Colors.grey),
-                    ),
-                    Text(
-                      oCcy.format(diffAmount) + " руб.",
-                      textAlign: TextAlign.left,
-                      style: TextStyle(fontSize: 12, color: colorAmount),
-                    ),
-                  ],
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                    child: Container(
+                      child: Text(
+                        "динамика",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 12, color: Colors.grey),
+                      ),
+                    )),
+                Container(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "$diffPercent%",
+                        textAlign: TextAlign.left,
+                        style: TextStyle(fontSize: 12, color: colorPercent),
+                      ),
+                      Text(
+                        " / ",
+                        textAlign: TextAlign.left,
+                        style: TextStyle(fontSize: 12, color: Colors.grey),
+                      ),
+                      Text(
+                        oCcy.format(diffAmount) + " руб.",
+                        textAlign: TextAlign.left,
+                        style: TextStyle(fontSize: 12, color: colorAmount),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ],
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

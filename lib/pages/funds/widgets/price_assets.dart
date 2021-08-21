@@ -51,6 +51,11 @@ class BorderButton extends StatelessWidget {
                     side: BorderSide(
                         color: isActive
                             ? Enum.firstColor
-                            : Colors.grey)))));
+                            : Colors.grey
+                    )
+                )
+            )
+        )
+    );
   }
 }
