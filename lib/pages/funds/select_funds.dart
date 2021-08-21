@@ -46,24 +46,15 @@ class SelectFundsList extends StatelessWidget {
     final MainController c = Get.find<MainController>();
 
     return Obx(() => Conditional.single(
-      context: context,
-      conditionBuilder: (context) => c.searchFundsKeyword.isNotEmpty,
-      widgetBuilder: (context) =>  Conditional.single(
-        context: context,
-        conditionBuilder: (context) => c.findFunds.length > 0,
-        widgetBuilder: (context) => ListView(
-            children: c.findFunds.map((e) => SelectFundsListItem(
-                e["name_rus"], e["ID"], e["funds_object_name_rus"]))
-                .toList()
-        ),
-        fallbackBuilder: (context) => Text("Не найдено ни одного фонда"),
-      ),
-      fallbackBuilder: (context) => ListView(
-          children: c.allFunds.map((e) => SelectFundsListItem(
-              e["name_rus"], e["ID"], e["funds_object_name_rus"]))
-              .toList()
-      ),
-    ));
+          context: context,
+          conditionBuilder: (context) => c.findFunds.length == 0,
+          widgetBuilder: (context) => Text("Не найдено ни одного фонда"),
+          fallbackBuilder: (context) => ListView(
+              children: c.findFunds
+                  .map((e) => SelectFundsListItem(
+                      e["name_rus"], e["ID"], e["funds_object_name_rus"]))
+                  .toList()),
+        ));
   }
 }
 
@@ -77,6 +68,8 @@ class SelectFundsListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
+    final MainController c = Get.find<MainController>();
+
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -85,14 +78,14 @@ class SelectFundsListItem extends StatelessWidget {
         Material(
           type: MaterialType.card,
           child: ListTile(
-            onTap: () => { },
+            onTap: () => { c.isFavoriteFund(fundId) ? c.deleteFavoriteFund(fundId) : c.addFavoriteFund(fundId)  },
             title: Text(text, style: TextStyle(
                 color: Colors.grey[600],
                 fontWeight: FontWeight.w500,
                 fontSize: 14
             )),
             leading: CircleAvatar(
-              backgroundColor: Enum.firstColor,
+              backgroundColor: c.isFavoriteFund(fundId) ? Enum.firstColor : Colors.grey,
               child: const Icon(Icons.check, color: Colors.white),
             ),
             trailing: CircleAvatar(

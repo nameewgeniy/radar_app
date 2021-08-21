@@ -1,11 +1,7 @@
-import 'dart:convert';
-import 'dart:ffi';
-import 'dart:math';
-
-import 'package:charts_flutter/flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:radar/api/api.dart';
 import 'package:radar/enum/enum.dart';
 import 'package:radar/models/Fund.dart';
@@ -16,13 +12,22 @@ import 'package:radar/models/Period.dart';
 import 'package:radar/pages/pages.dart';
 import 'package:radar/routes/routes.dart';
 
-void main() => runApp(GetMaterialApp(
-      getPages: Pages.pages,
-      initialRoute: Routes.initial,
-      theme: ThemeData(
-        primaryColor: Enum.firstColor,
-      ),
-    ));
+void main() async {
+
+  await Hive.initFlutter();
+
+  var box = await Hive.openBox('app');
+
+  runApp(GetMaterialApp(
+    getPages: Pages.pages,
+    initialRoute: Routes.initial,
+    theme: ThemeData(
+      primaryColor: Enum.firstColor,
+    ),
+  ));
+
+  box.close();
+}
 
 class MainController extends GetxController {
 
@@ -48,6 +53,7 @@ class MainController extends GetxController {
   var fundsStructure = <FundsStructure>[].obs;
   var branches = <FundsStructure>[].obs;
   var selectedFund = Fund().obs;
+  var favoriteFunds = <int>[].obs;
   var selectedMoreItems = <Map>[].obs;
   var selectedFundId = 0.obs;
   var allFunds = [].obs;
@@ -123,6 +129,7 @@ class MainController extends GetxController {
   loadAllFunds() async {
     var response = await Api().fetchFunds();
     allFunds.assignAll(response);
+    findFunds.assignAll(response);
   }
 
   loadAssetsByFundId() async {
@@ -226,11 +233,37 @@ class MainController extends GetxController {
   }
 
   filterFundsByKeywords(value) {
+
+    if (value == "") {
+      findFunds.assignAll(allFunds.value);
+    }
+
     searchFundsKeyword.value = value;
     findFunds.assignAll(
         allFunds.value.where((element) => element["name_rus"].toString().toUpperCase().indexOf(
             value.toString().toUpperCase()
         ) >= 0)
     );
+  }
+
+  addFavoriteFund(id) {
+    favoriteFunds.value.add(id);
+    findFunds.refresh();
+  }
+
+  deleteFavoriteFund(id) {
+    favoriteFunds.value.remove(id);
+    findFunds.refresh();
+  }
+
+  isFavoriteFund(id) {
+
+    if (favoriteFunds.value.isEmpty) {
+      return false;
+    }
+
+    return favoriteFunds.value.firstWhere(
+            (el) => el == id, orElse: () => null
+    ) != null ? true : false;
   }
 }

@@ -14,7 +14,8 @@ class FundMoreList extends StatelessWidget {
         child: Obx(() => Column(
             children: c.selectedMoreItems
                 .map((e) => FundMoreListItem(e["name"] + ": " + e["value"]))
-                .toList())
+                .toList()
+        )
         ));
   }
 }
