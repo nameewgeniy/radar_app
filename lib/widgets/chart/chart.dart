@@ -1,6 +1,7 @@
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:radar/controllers/funds.dart';
 import 'package:radar/main.dart';
 
 class GaugeChart extends StatelessWidget {
@@ -24,7 +25,7 @@ class GaugeChart extends StatelessWidget {
   /// Create one series with sample hard coded data.
   List<charts.Series<GaugeSegment, String>> _prepareDate() {
 
-    final c = Get.find<MainController>();
+    final c = Get.find<FundController>();
 
     var data = c.fundsStructure.map((e) {
       return GaugeSegment(c.getLabelTypeByValue(e.type), (e.percent * 1000).toInt(), charts.Color(g: e.color.green, b: e.color.blue, r: e.color.red));

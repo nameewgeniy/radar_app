@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_conditional_rendering/conditional.dart';
 import 'package:get/get.dart';
+import 'package:radar/controllers/funds.dart';
 import 'package:radar/enum/enum.dart';
-import 'package:radar/main.dart';
+import 'package:radar/models/Fund.dart';
 import 'package:radar/widgets/bottom_bar.dart';
 import 'package:radar/widgets/input/primary.dart';
 
@@ -11,7 +12,7 @@ class SelectFundsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    final MainController c = Get.find<MainController>();
+    final FundController c = Get.find<FundController>();
 
     return Material(
       clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -43,7 +44,7 @@ class SelectFundsPage extends StatelessWidget {
 class SelectFundsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final MainController c = Get.find<MainController>();
+    final FundController c = Get.find<FundController>();
 
     return Obx(() => Conditional.single(
           context: context,
@@ -51,24 +52,21 @@ class SelectFundsList extends StatelessWidget {
           widgetBuilder: (context) => Text("Не найдено ни одного фонда"),
           fallbackBuilder: (context) => ListView(
               children: c.findFunds
-                  .map((e) => SelectFundsListItem(
-                      e["name_rus"], e["ID"], e["funds_object_name_rus"]))
+                  .map((fund) => SelectFundsListItem(fund))
                   .toList()),
         ));
   }
 }
 
 class SelectFundsListItem extends StatelessWidget {
-  final String text;
-  final int fundId;
-  final String subtext;
+  final Fund fund;
 
-  SelectFundsListItem(this.text, this.fundId, this.subtext);
+  SelectFundsListItem(this.fund);
 
   @override
   Widget build(BuildContext context) {
 
-    final MainController c = Get.find<MainController>();
+    final FundController c = Get.find<FundController>();
 
     return Container(
       decoration: BoxDecoration(
@@ -78,19 +76,19 @@ class SelectFundsListItem extends StatelessWidget {
         Material(
           type: MaterialType.card,
           child: ListTile(
-            onTap: () => { c.isFavoriteFund(fundId) ? c.deleteFavoriteFund(fundId) : c.addFavoriteFund(fundId)  },
-            title: Text(text, style: TextStyle(
+            onTap: () => { c.isFavoriteFund(fund) ? c.deleteFavoriteFund(fund) : c.addFavoriteFund(fund)  },
+            title: Text(fund.nameRus, style: TextStyle(
                 color: Colors.grey[600],
                 fontWeight: FontWeight.w500,
                 fontSize: 14
             )),
             leading: CircleAvatar(
-              backgroundColor: c.isFavoriteFund(fundId) ? Enum.firstColor : Colors.grey,
+              backgroundColor: c.isFavoriteFund(fund) ? Enum.firstColor : Colors.grey,
               child: const Icon(Icons.check, color: Colors.white),
             ),
             trailing: CircleAvatar(
               backgroundColor: Colors.grey.shade100,
-              child: Text(text.substring(0, 2).toUpperCase()),
+              child: Text(fund.nameRus.substring(0, 2).toUpperCase()),
             ),
           ),
         )

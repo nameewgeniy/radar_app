@@ -2,12 +2,12 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:radar/main.dart';
+import 'package:radar/controllers/funds.dart';
 
 class FundAssetsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final MainController c = Get.find<MainController>();
+    final FundController c = Get.find<FundController>();
 
     return Container(
         child: Obx(() => ListView.separated(

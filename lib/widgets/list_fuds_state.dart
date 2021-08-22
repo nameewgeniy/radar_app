@@ -3,12 +3,13 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
+import 'package:radar/controllers/funds.dart';
 import 'package:radar/main.dart';
 import 'package:intl/intl.dart';
 
 class ListFundState extends StatelessWidget {
 
-  final MainController c = Get.find<MainController>();
+  final FundController c = Get.find<FundController>();
 
   @override
   Widget build(BuildContext context) {

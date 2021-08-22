@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:radar/controllers/funds.dart';
 import 'package:radar/main.dart';
 import 'package:radar/routes/routes.dart';
 import 'package:radar/widgets/header_title.dart';
@@ -8,7 +9,7 @@ import 'package:radar/widgets/list_fuds_state.dart';
 class FundMoreList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final MainController c = Get.find<MainController>();
+    final FundController c = Get.find<FundController>();
 
     return Container(
         child: Obx(() => Column(

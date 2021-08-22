@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:radar/controllers/funds.dart';
 import 'package:radar/main.dart';
 import 'package:radar/pages/funds/widgets/price_assets.dart';
 
 class GroupButtons extends StatelessWidget {
-  final MainController c = Get.find<MainController>();
+  final FundController c = Get.find<FundController>();
 
   @override
   Widget build(BuildContext context) {

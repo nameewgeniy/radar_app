@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:radar/controllers/funds.dart';
 import 'package:radar/main.dart';
 import 'package:intl/intl.dart';
 import 'package:radar/widgets/chart/chart.dart';
@@ -9,7 +10,7 @@ class FundStructure extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    final c = Get.find<MainController>();
+    final c = Get.find<FundController>();
     final oCcy = new NumberFormat("#,##0", "ru_RU");
 
     return Column(

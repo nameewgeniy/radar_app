@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:radar/controllers/funds.dart';
 import 'package:radar/main.dart';
 import 'package:radar/pages/funds/widgets/fund_profit.dart';
 import 'package:radar/pages/funds/widgets/list_fund_assets.dart';
@@ -11,11 +12,11 @@ import 'package:radar/widgets/second_header.dart';
 class FundPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final MainController c = Get.find<MainController>();
+    final FundController c = Get.find<FundController>();
 
     if (Get.arguments["id"] != null) {
       c.selectFund(Get.arguments["id"]);
-      c.loadAssetsByFundId();
+      c.loadFundStructureByFundId();
     }
 
     return Material(

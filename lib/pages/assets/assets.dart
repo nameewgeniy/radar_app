@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:radar/controllers/funds.dart';
 import 'package:radar/main.dart';
 import 'package:radar/pages/funds/widgets/list_fund_assets.dart';
 import 'package:radar/pages/funds/widgets/price_assets.dart';
@@ -11,7 +12,7 @@ import 'package:radar/widgets/select_fund.dart';
 class AssetsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final MainController c = Get.find<MainController>();
+    final FundController c = Get.find<FundController>();
 
     return Material(
       clipBehavior: Clip.antiAliasWithSaveLayer,

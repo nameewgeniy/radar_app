@@ -2,6 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
+import 'package:radar/models/Fund.dart';
+import 'package:radar/models/FundStructure.dart';
+import 'package:radar/models/FundsStructure.dart';
 
 Dio apiDio = Dio();
 
@@ -32,11 +35,29 @@ class Api {
   }
 
   Future fetchFunds() async {
-    return await Api().get(method: "/api/GetAllFunds");
+    var response = await Api().get(method: "/api/GetAllFunds");
+    var funds = <Fund>[];
+
+    if (response != null) {
+      response.forEach(
+              (map) => funds.add(Fund.fromMap(map))
+      );
+    }
+
+    return funds;
   }
 
-  Future fetchAssetsByFund(id, range) async {
-    return await Api().get(method: "/api/assets-by-fund/$id/$range");
+  Future fetchFundStructure(id, range) async {
+    var response = await Api().get(method: "/api/assets-by-fund/$id/$range");
+    var fundStructure = <FundStructure>[];
+
+    if (response != null) {
+      response.forEach((element) =>
+          fundStructure.add(FundStructure.fromMap(element))
+      );
+    }
+
+    return fundStructure;
   }
 
   Future fetchFundsStructure(range) async {

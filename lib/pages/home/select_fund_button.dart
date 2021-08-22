@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:radar/controllers/funds.dart';
 import 'package:radar/enum/enum.dart';
 import 'package:radar/routes/routes.dart';
 
@@ -7,6 +8,9 @@ class SelectFundButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final FundController c = Get.find<FundController>();
+
     return Container(
       height: 45,
       width: double.infinity,
@@ -17,7 +21,9 @@ class SelectFundButton extends StatelessWidget {
         border: Border.all(color: Enum.firstColor)
       ),
       child: TextButton(
-        child: Text("ВЫБРАННЫЕ ФОНДЫ", style: TextStyle(color: Enum.firstColor, fontSize: 12),),
+        child: Obx(
+                () => Text("ИЗБРАННЫЕ ФОНДЫ (" + c.favoriteFunds.length.toString() + ")", style: TextStyle(color: Enum.firstColor, fontSize: 12))
+        ),
         onPressed: () => { Get.toNamed(Routes.select_funds) },
       ),
     );

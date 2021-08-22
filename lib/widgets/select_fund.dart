@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:radar/main.dart';
-import 'package:radar/widgets/header_title.dart';
-import 'package:radar/widgets/list_fuds_state.dart';
+import 'package:radar/controllers/funds.dart';
 
 class SelectFund extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
 
-    final MainController c = Get.find<MainController>();
+    final FundController c = Get.find<FundController>();
 
     return Column(
       children: [
@@ -28,7 +26,7 @@ class SelectFundList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    final MainController c = Get.find<MainController>();
+    final FundController c = Get.find<FundController>();
 
     return Container(
       height: 400,
@@ -44,7 +42,7 @@ class SelectFundList extends StatelessWidget {
         ],
       ),
       child: Obx(() => ListView(
-        children: c.allFunds.map((e) => SelectFundListItem(e["funds_comp_name_rus"], e["id"])).toList(),
+        children: c.allFunds.map((e) => SelectFundListItem(e.fundsCompNameRus, e.id)).toList(),
       )),
     );
   }
@@ -54,14 +52,14 @@ class SelectFundList extends StatelessWidget {
 class SelectFundListItem extends StatelessWidget {
 
   final String text;
-  final String fund_id;
+  final int fundId;
 
-  SelectFundListItem(this.text, this.fund_id);
+  SelectFundListItem(this.text, this.fundId);
 
   @override
   Widget build(BuildContext context) {
 
-    final MainController c = Get.find<MainController>();
+    final FundController c = Get.find<FundController>();
 
     return Container(
       decoration: BoxDecoration(
@@ -73,7 +71,7 @@ class SelectFundListItem extends StatelessWidget {
             type: MaterialType.card,
             child: ListTile(
               onTap: () => {
-                c.selectFund(fund_id),
+                c.selectFund(fundId),
                 Get.back()
               },
               title: Text(text, style: TextStyle(color: Colors.grey[600])),

@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:radar/controllers/funds.dart';
 import 'package:radar/main.dart';
 import 'package:radar/models/Nav.dart';
 import 'package:intl/intl.dart';
@@ -18,7 +19,7 @@ class TimeSeriesChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final c = Get.find<MainController>();
+    final c = Get.find<FundController>();
 
     final currencyFormatter = new charts.BasicNumericTickFormatterSpec.fromNumberFormat(
         new NumberFormat.compactCurrency(locale: "ru_RU", symbol: '₽')
