@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:radar/controllers/funds.dart';
 import 'package:radar/main.dart';
 import 'package:intl/intl.dart';
+import 'package:radar/routes/routes.dart';
 import 'package:radar/widgets/chart/chart.dart';
 
 class FundStructure extends StatelessWidget {
@@ -80,7 +81,7 @@ class FundStructureItem extends StatelessWidget {
     }
 
     return TextButton(
-      onPressed: () => {},
+      onPressed: () => { Get.toNamed(Routes.assets_type, arguments: {"title": title}) },
       child: Container(
         child: Column(
           children: [

@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:radar/controllers/funds.dart';
 import 'package:radar/main.dart';
 import 'package:intl/intl.dart';
+import 'package:radar/routes/routes.dart';
 
 class ListFundState extends StatelessWidget {
 
@@ -68,7 +69,7 @@ class ListFundStateItem extends StatelessWidget {
     }
 
     return TextButton(
-      onPressed: () => {},
+      onPressed: () => { Get.toNamed(Routes.assets_branch) },
       child: Container(
         child: Column(
           children: [

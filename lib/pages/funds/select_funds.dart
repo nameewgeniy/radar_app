@@ -22,7 +22,7 @@ class SelectFundsPage extends StatelessWidget {
         child: Scaffold(
           appBar: AppBar(
             title: Text("Выберите фонд"),
-            centerTitle: false,
+            centerTitle: true,
           ),
           body: Container(
             color: Colors.white,
