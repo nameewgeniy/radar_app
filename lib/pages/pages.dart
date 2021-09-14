@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:radar/bindings/assets.dart';
 import 'package:radar/bindings/main.dart';
+import 'package:radar/pages/assets/asset.dart';
 import 'package:radar/pages/assets/assets.dart';
 import 'package:radar/pages/assets/branch.dart';
 import 'package:radar/pages/assets/type.dart';
@@ -20,7 +21,7 @@ class Pages {
         page: () => AssetsPage(),
         transition: Transition.noTransition,
         transitionDuration: Duration(milliseconds: 1),
-        binding: HomeBinding()
+        binding: AssetsBinding()
     ),
     GetPage(
         name: Routes.funds,
@@ -55,7 +56,14 @@ class Pages {
         page: () => AssetsBranch(),
         transition: Transition.noTransition,
         transitionDuration: Duration(milliseconds: 10),
-        binding: HomeBinding()
+        binding: AssetsBinding()
+    ),
+    GetPage(
+        name: Routes.asset,
+        page: () => AssetPage(),
+        transition: Transition.noTransition,
+        transitionDuration: Duration(milliseconds: 10),
+        binding: AssetsBinding()
     )
   ];
 }

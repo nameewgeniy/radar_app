@@ -3,6 +3,7 @@
 class Routes {
   static const String initial = "/";
   static const String assets = "/assets";
+  static const String asset = "/asset";
   static const String assets_type = "/assets/type";
   static const String assets_branch = "/assets/branch";
   static const String funds = "/funds";

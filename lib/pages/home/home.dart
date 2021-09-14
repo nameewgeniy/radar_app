@@ -1,11 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:radar/pages/home/select_fund_button.dart';
+import 'package:get/get.dart';
+import 'package:radar/pages/home/widgets/favorite_funds.dart';
+import 'package:radar/pages/home/widgets/fund_structure.dart';
+import 'package:radar/pages/home/widgets/select_fund_button.dart';
+import 'package:radar/routes/routes.dart';
 import 'package:radar/widgets/bottom_bar.dart';
-import 'package:radar/widgets/chart/fund_structure.dart';
 import 'package:radar/widgets/custom_drawer.dart';
 import 'package:radar/widgets/header_title.dart';
-import 'package:radar/widgets/list_fuds_state.dart';
+import 'package:radar/pages/home/widgets/list_fuds_state.dart';
 
 class HomePage extends StatelessWidget {
   @override
@@ -38,7 +41,7 @@ class HomePage extends StatelessWidget {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 10, right: 10),
-                    child: FundStructure(),
+                    child: FundStructureWidget(),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 10, top: 15, bottom: 5),
@@ -49,6 +52,32 @@ class HomePage extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(left:10, right: 20),
                     child: ListFundState(),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left:10, top: 15, bottom: 15),
+                    child: HeaderTitle(
+                      text: "Избранные фонды",
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 0),
+                    child: Container(
+                        color: Colors.white,
+                        child: Column(children: <Widget>[
+                          Container(
+                            constraints: BoxConstraints(
+                              maxHeight: 330,
+                            ),
+                            child: FavoriteFunds(),
+                          ),
+                          Container(
+                            child: TextButton(
+                              onPressed: () => {Get.toNamed(Routes.select_funds)},
+                              child: Text("Изменить выбор"),
+                            ),
+                          )
+                        ])
+                    ),
                   ),
                 ],
               ),

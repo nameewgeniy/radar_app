@@ -2,7 +2,6 @@ import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:radar/controllers/funds.dart';
-import 'package:radar/main.dart';
 
 class GaugeChart extends StatelessWidget {
   final bool animate;
@@ -27,7 +26,7 @@ class GaugeChart extends StatelessWidget {
 
     final c = Get.find<FundController>();
 
-    var data = c.fundsStructure.map((e) {
+    var data = c.fundsAssetsStructure.map((e) {
       return GaugeSegment(c.getLabelTypeByValue(e.type), (e.percent * 1000).toInt(), charts.Color(g: e.color.green, b: e.color.blue, r: e.color.red));
     }).toList();
 

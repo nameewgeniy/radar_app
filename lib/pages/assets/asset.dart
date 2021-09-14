@@ -6,33 +6,35 @@ import 'package:radar/controllers/funds.dart';
 import 'package:radar/main.dart';
 import 'package:radar/pages/funds/widgets/list_fund_assets.dart';
 import 'package:radar/pages/funds/widgets/price_assets.dart';
-import 'package:radar/routes/routes.dart';
 import 'package:radar/widgets/bottom_bar.dart';
 import 'package:radar/widgets/custom_drawer.dart';
-import 'package:radar/widgets/input/primary.dart';
 import 'package:radar/widgets/select_fund.dart';
 
-class AssetsPage extends StatelessWidget {
+class AssetPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+
     final AssetsController c = Get.find<AssetsController>();
+    final arg = Get.arguments;
 
     return Material(
       clipBehavior: Clip.antiAliasWithSaveLayer,
       child: Scaffold(
         appBar: AppBar(
-          title: Text("Фонд-радар"),
+          title: Text(arg["title"] ?? "Фонд-радар"),
           centerTitle: true,
         ),
-        drawer: CustomDrawer(),
         body: Container(
           color: Colors.white,
           child: Padding(
               padding: const EdgeInsets.only(left: 0, top: 10),
               child: Column(
                 children: [
-                  PrimaryInput( "Поиск", (value) => { c.filterAssetsByKeywords(value) } ),
-                  Expanded(child: FundAssetsList()),
+                  Container(
+                    padding: const EdgeInsets.only(left: 10),
+                    child: Text("Список фондов, в которых состоит актив в % соостношении в каждом фонде"),
+                  ),
+                  Divider(),
                 ],
               ))
         ),

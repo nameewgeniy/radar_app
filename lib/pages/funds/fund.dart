@@ -6,6 +6,8 @@ import 'package:radar/pages/funds/widgets/fund_profit.dart';
 import 'package:radar/pages/funds/widgets/list_fund_assets.dart';
 import 'package:radar/pages/funds/widgets/list_fund_more.dart';
 import 'package:radar/pages/funds/widgets/price_assets.dart';
+import 'package:radar/pages/home/widgets/fund_structure.dart';
+import 'package:radar/pages/home/widgets/list_fuds_state.dart';
 import 'package:radar/widgets/bottom_bar.dart';
 import 'package:radar/widgets/second_header.dart';
 
@@ -65,17 +67,29 @@ class FundPage extends StatelessWidget {
                       child: FundMoreList(),
                     ),
 
-                    Padding(
-                      padding: const EdgeInsets.only(left: 15, top: 15, bottom: 15),
-                      child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: SecondHeader("Доходность фонда")),
+                    Container(
+                      padding: const EdgeInsets.only(left: 15, top: 15, right: 15),
+                      child: SecondHeader("Ценные бумаги"),
                     ),
 
                     Container(
-                      color: Colors.grey.shade100,
-                      padding: const EdgeInsets.only(left: 15, top: 10, right: 15, bottom: 10),
-                      child: FundProfit(),
+                      padding: const EdgeInsets.only(top: 10),
+                      child: Obx(() => Wrap(
+                          alignment: WrapAlignment.spaceBetween,
+                          children: c.fundsAssetsStructure.map((e) {
+                            return FundStructureItem(e.percent, e.diffPercent, e.amount, e.diffAmount, c.getLabelTypeByValue(e.type), color: e.color);
+                          }).toList()
+                      )),
+                    ),
+
+                    Container(
+                      padding: const EdgeInsets.only(left: 15, top: 15, right: 15),
+                      child: SecondHeader("Отрасли"),
+                    ),
+
+                    Container(
+                      padding: const EdgeInsets.only(top: 10),
+                      child: ListFundState(),
                     ),
 
                     Container(
@@ -85,7 +99,8 @@ class FundPage extends StatelessWidget {
 
                     Container(
                       padding: const EdgeInsets.only(left: 5, top: 15, bottom: 15, right: 5),
-                      child: PriceAssets()),
+                      child: PriceAssets()
+                    ),
                   ],
                 ),
               ),
@@ -93,21 +108,6 @@ class FundPage extends StatelessWidget {
                   padding: const EdgeInsets.only(left: 0, top: 10),
                   child: Column(
                     children: [
-                      Container(
-                        padding: const EdgeInsets.only(left: 10),
-                        child: Obx(() => Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: c.assetsPeriod
-                                .map((e) => Container(
-                                    child: BorderButton(
-                                        text: e.label,
-                                        onPressed: () =>
-                                            {c.selectAssetsPeriod(e.value, Get.arguments["id"])},
-                                        isActive: e.value ==
-                                            c.selectedAssetsPeriod.value.value),
-                                    margin: const EdgeInsets.only(right: 5)))
-                                .toList())),
-                      ),
                       Divider(),
                       Expanded(child: FundAssetsList()),
                     ],

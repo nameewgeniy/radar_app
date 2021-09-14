@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:radar/controllers/assets.dart';
-import 'package:radar/controllers/funds.dart';
-import 'package:radar/routes/routes.dart';
 
-class FundAssetsList extends StatelessWidget {
+class AssetsByBranch extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final FundController c = Get.find<FundController>();
+    final AssetsController c = Get.find<AssetsController>();
 
     return Container(
         child: Obx(() => ListView.separated(
@@ -21,29 +19,27 @@ class FundAssetsList extends StatelessWidget {
                   ),
                 ),
               ),
-              itemCount: c.assetsFund.length,
+              itemCount: c.assetsByBranch.length,
               itemBuilder: (context, index) {
-                final item = c.assetsFund[index];
-                return FundAssetsListItem(
+                final item = c.assetsByBranch[index];
+                return AssetsByBranchItem(
                   item.name,
                   0,
                   item.percent,
                   item.diffPercent,
                 );
               },
-            ))
-    );
+            )));
   }
 }
 
-class FundAssetsListItem extends StatelessWidget {
+class AssetsByBranchItem extends StatelessWidget {
   final String text;
   final double currentPercent;
   final double diffPercent;
   final int id;
 
-  FundAssetsListItem(
-      this.text, this.id, this.currentPercent, this.diffPercent);
+  AssetsByBranchItem(this.text, this.id, this.currentPercent, this.diffPercent);
 
   @override
   Widget build(BuildContext context) {
@@ -55,12 +51,13 @@ class FundAssetsListItem extends StatelessWidget {
         Material(
           type: MaterialType.card,
           child: ListTile(
-            onTap: () => {Get.toNamed(Routes.asset, arguments: { "title": text, "id": id})},
+            onTap: () => {},
             title: Text(text,
                 style: TextStyle(
                     color: Colors.grey[600],
                     fontWeight: FontWeight.w500,
-                    fontSize: 14)),
+                    fontSize: 14)
+            ),
             trailing: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

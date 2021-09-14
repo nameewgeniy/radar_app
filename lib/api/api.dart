@@ -17,8 +17,8 @@ class Api {
     try {
       Map<String, dynamic> headers = {};
       final Response response = await apiDio.get(
-        "http://109.68.190.168:9667" + method,
-        //"http://192.168.0.107:9667" + method,
+        //"http://109.68.190.168:9667" + method,
+        "http://192.168.0.109:8080" + method,
         queryParameters: queryParameters,
         options: Options(
           headers: headers,
@@ -35,7 +35,7 @@ class Api {
   }
 
   Future fetchFunds() async {
-    var response = await Api().get(method: "/api/GetAllFunds");
+    var response = await Api().get(method: "/api/funds/all");
     var funds = <Fund>[];
 
     if (response != null) {
@@ -48,7 +48,7 @@ class Api {
   }
 
   Future fetchFundStructure(id, range) async {
-    var response = await Api().get(method: "/api/assets-by-fund/$id/$range");
+    var response = await Api().get(method: "/api/funds/assets/$id/$range");
     var fundStructure = <FundStructure>[];
 
     if (response != null) {
@@ -60,12 +60,12 @@ class Api {
     return fundStructure;
   }
 
-  Future fetchFundsStructure(range) async {
-    return await Api().get(method: "/api/funds/structure/$range");
+  Future fetchFundsStructure(range, List ids) async {
+    return await Api().get(method: "/api/funds/structure/type/$range?ids[]=" + ids.join("&ids[]="));
   }
 
-  Future fetchBranch(range) async {
-    return await Api().get(method: "/api/funds/structure/branch/$range");
+  Future fetchBranch(range, List ids) async {
+    return await Api().get(method: "/api/funds/structure/branch/$range?ids[]=" + ids.join("&ids[]="));
   }
 
   Future fetchNavByFundId(id, range) async {
