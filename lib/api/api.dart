@@ -19,8 +19,8 @@ class Api {
     try {
       Map<String, dynamic> headers = {};
       final Response response = await apiDio.get(
-        //"http://109.68.190.168:9667" + method,
-        "http://192.168.0.109:8080" + method,
+        "http://109.68.190.168:9667" + method,
+        //"http://192.168.0.109:8080" + method,
         queryParameters: queryParameters,
         options: Options(
           headers: headers,
