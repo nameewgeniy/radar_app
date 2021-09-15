@@ -2,16 +2,18 @@ import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:radar/controllers/funds.dart';
+import 'package:radar/models/FundsStructure.dart';
 
 class GaugeChart extends StatelessWidget {
   final bool animate;
+  final List<FundsStructure> data;
 
-  GaugeChart({this.animate});
+  GaugeChart(this.data, {this.animate});
 
   @override
   Widget build(BuildContext context) {
 
-    return new charts.PieChart(_prepareDate(),
+    return new charts.PieChart(_prepareDate(data),
         animate: animate,
         defaultRenderer: new charts.ArcRendererConfig(
             arcWidth: 20,
@@ -22,11 +24,11 @@ class GaugeChart extends StatelessWidget {
   }
 
   /// Create one series with sample hard coded data.
-  List<charts.Series<GaugeSegment, String>> _prepareDate() {
+  List<charts.Series<GaugeSegment, String>> _prepareDate(List<FundsStructure> items) {
 
     final c = Get.find<FundController>();
 
-    var data = c.fundsAssetsStructure.map((e) {
+    var data = items.map((e) {
       return GaugeSegment(c.getLabelTypeByValue(e.type), (e.percent * 1000).toInt(), charts.Color(g: e.color.green, b: e.color.blue, r: e.color.red));
     }).toList();
 

@@ -4,9 +4,10 @@ import 'package:get/get.dart';
 import 'package:radar/controllers/funds.dart';
 import 'package:radar/enum/enum.dart';
 import 'package:radar/main.dart';
-import 'package:radar/pages/funds/widgets/chart.dart';
+import 'package:radar/screens/funds/widgets/chart.dart';
+import 'package:radar/widgets/button/border_button.dart';
 
-class PriceAssets extends StatelessWidget {
+class FundPriceAssets extends StatelessWidget {
 
   final FundController c = Get.find<FundController>();
 
@@ -29,34 +30,6 @@ class PriceAssets extends StatelessWidget {
                   .toList())),
         )
       ],
-    );
-  }
-}
-
-class BorderButton extends StatelessWidget {
-  final String text;
-  final VoidCallback onPressed;
-  final bool isActive;
-
-  BorderButton({this.text, this.onPressed, this.isActive});
-
-  @override
-  Widget build(BuildContext context) {
-    return TextButton(
-        onPressed: onPressed,
-        child: Text(text, style: TextStyle(color: isActive ? Enum.firstColor : Colors.black54 , fontSize: 11)),
-        style: ButtonStyle(
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                    side: BorderSide(
-                        color: isActive
-                            ? Enum.firstColor
-                            : Colors.grey
-                    )
-                )
-            )
-        )
     );
   }
 }

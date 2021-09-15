@@ -6,6 +6,7 @@ import 'package:radar/models/FundStructure.dart';
 import 'package:radar/models/FundsStructure.dart';
 import 'package:radar/models/Nav.dart';
 import 'package:radar/models/Period.dart';
+import 'package:radar/models/StructureItem.dart';
 import 'package:radar/widgets/chart/chart.dart';
 
 class FundController extends GetxController {
@@ -16,6 +17,13 @@ class FundController extends GetxController {
   var fundsAssetsStructure = <FundsStructure>[].obs;
   var sumAmount = 0.0.obs;
   var fundsStructureCharts = <GaugeSegment>[].obs;
+  var fundsBranchStructure = <FundsStructure>[].obs;
+  var assetsFund = <StructureItem>[].obs;
+  var keywordFundTypeAssets = "".obs;
+  var keywordFundTypeBranch = "".obs;
+  var keywordFundsTypeAssets = "".obs;
+  var keywordFundsTypeBranch = "".obs;
+
 /*
   @override
   void onInit() {
@@ -28,6 +36,8 @@ class FundController extends GetxController {
     loadAllFunds();
     loadFundsAssetsStructure();
     loadFundsBranchStructure();
+
+    loadAssets();
 
     /*selectHomePeriod(3);
     selectNav(0);
@@ -49,14 +59,18 @@ class FundController extends GetxController {
       fundsAssetsStructure.add(item);
       sumAmount.value += item.amount;
     });
+
+    fundsAssetsStructure.value.sort((a, b) => b.percent.compareTo(a.percent));
   }
 
   loadFundsBranchStructure() async {
     var response = await Api().fetchBranch(6, favoriteFunds.value.map((e) => e.id).toList());
-    branches.clear();
+    fundsBranchStructure.clear();
     response.forEach((element) =>
-        branches.add(FundsStructure.fromMap(element))
+        fundsBranchStructure.add(FundsStructure.fromMap(element))
     );
+
+    fundsBranchStructure.value.sort((a, b) => b.percent.compareTo(a.percent));
   }
 
   loadAllFunds() async {
@@ -76,6 +90,15 @@ class FundController extends GetxController {
 
   addFavoriteFund(Fund f) {
     favoriteFunds.value.add(f);
+    findFunds.refresh();
+    favoriteFunds.refresh();
+
+    loadFundsAssetsStructure();
+    loadFundsBranchStructure();
+  }
+
+  deleteFavoriteFund(Fund f) {
+    favoriteFunds.value.remove(f);
     findFunds.refresh();
     favoriteFunds.refresh();
 
@@ -137,6 +160,64 @@ class FundController extends GetxController {
     }
   }
 
+  List<StructureItem> get findFundsTypeAssets {
+
+    if (assetsFund.isNotEmpty) {
+      return assetsFund.value.where((element) =>
+        element.name.toString().toUpperCase().indexOf(
+          keywordFundsTypeAssets.value.toUpperCase()
+      ) >= 0).toList();
+    }
+
+    return assetsFund;
+  }
+
+  List<StructureItem> get findFundsTypeBranch {
+
+    if (assetsFund.isNotEmpty) {
+      return assetsFund.value.where((element) =>
+      element.name.toString().toUpperCase().indexOf(
+          keywordFundsTypeBranch.value.toUpperCase()
+      ) >= 0).toList();
+    }
+
+    return assetsFund;
+  }
+
+  List<StructureItem> get findFundTypeBranch {
+
+    if (assetsFund.isNotEmpty) {
+      return assetsFund.value.where((element) =>
+      element.name.toString().toUpperCase().indexOf(
+          keywordFundTypeBranch.value.toUpperCase()
+      ) >= 0).toList();
+    }
+
+    return assetsFund;
+  }
+
+  List<StructureItem> get findFundTypeAssets {
+
+    if (assetsFund.isNotEmpty) {
+      return assetsFund.value.where((element) =>
+      element.name.toString().toUpperCase().indexOf(
+          keywordFundTypeAssets.value.toUpperCase()
+      ) >= 0).toList();
+    }
+
+    return assetsFund;
+  }
+
+  setKeywordFundsTypeAssets(String keyword) => keywordFundsTypeAssets.value = keyword;
+  setKeywordFundsTypeBranch(String keyword) => keywordFundsTypeBranch.value = keyword;
+  setKeywordFundTypeAssets(String keyword) => keywordFundTypeAssets.value = keyword;
+  setKeywordFundTypeBranch(String keyword) => keywordFundTypeBranch.value = keyword;
+
+  // TODO убрать
+  loadAssets() async {
+    var items = await Api().fetchFundStructure(117, 3);
+    assetsFund.assignAll(items);
+  }
 
   // OLD
   var types = [
@@ -159,11 +240,9 @@ class FundController extends GetxController {
   ];
 
   var fundsStructure = <FundsStructure>[].obs;
-  var branches = <FundsStructure>[].obs;
   var selectedFund = Fund().obs;
   var selectedMoreItems = <Map>[].obs;
   var selectedFundId = 0.obs;
-  var assetsFund = <FundStructure>[].obs;
   var searchFundsKeyword = "".obs;
 
   var homeDatePeriod = <Period>[
@@ -216,12 +295,6 @@ class FundController extends GetxController {
     loadFundsBranchStructure();
   }
 
-
-
-
-
-
-
   loadNav() async {
     navItems.clear();
 
@@ -253,13 +326,6 @@ class FundController extends GetxController {
             value.toString().toUpperCase()
         ) >= 0)
     );
-  }
-
-
-  deleteFavoriteFund(Fund f) {
-    favoriteFunds.value.remove(f);
-    findFunds.refresh();
-    favoriteFunds.refresh();
   }
 
 

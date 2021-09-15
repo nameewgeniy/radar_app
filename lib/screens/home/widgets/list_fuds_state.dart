@@ -1,73 +1,72 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:radar/controllers/funds.dart';
-import 'package:radar/main.dart';
 import 'package:intl/intl.dart';
 import 'package:radar/routes/routes.dart';
-import 'package:radar/widgets/chart/chart.dart';
 
-class FundStructureWidget extends StatelessWidget {
+class ListFundState extends StatelessWidget {
+
+  final FundController c = Get.find<FundController>();
 
   @override
   Widget build(BuildContext context) {
-
-    final c = Get.find<FundController>();
-    final oCcy = new NumberFormat("#,##0", "ru_RU");
-
-    return Column(
-      children: [
-        Container(
-            height: 250,
-            child: Stack(
-              children: [
-                GaugeChart(),
-                Container(
-                  padding: const EdgeInsets.only(bottom: 45),
-                  child: Center(
-                    child: Text("Общая стоимость")
-                  ),
-                ),
-                Center(
-                  child: Obx(() => Text(
-                      oCcy.format(c.sumAmount.value) + ' руб.',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ))
+    return Container(
+      child: Obx(() => Column(
+        children: c.fundsBranchStructure.map(
+            (e) => Container(
+                padding: const EdgeInsets.only(top: 5),
+                child: ListFundStateItem(
+                  text: e.type,
+                  percent: e.percent,
+                  amount: e.amount,
+                  diffPercent: e.diffPercent,
+                  diffAmount: e.diffAmount,
                 )
-              ],
-            )),
-        Container(
-          child: Obx(() => Wrap(
-            alignment: WrapAlignment.spaceBetween,
-            children: c.fundsAssetsStructure.map((e) {
-                return FundStructureItem(e.percent, e.diffPercent, e.amount, e.diffAmount, c.getLabelTypeByValue(e.type), color: e.color);
-              }).toList()
-          )),
-        ),
-      ],
+            )
+        ).toList()
+      )),
     );
   }
+
 }
 
-class FundStructureItem extends StatelessWidget {
+class ListFundStateItem extends StatelessWidget {
 
+  final String text;
   final double percent;
   final double diffPercent;
   final double amount;
   final double diffAmount;
-  final String title;
-  final Color color;
 
-
-  FundStructureItem(this.percent, this.diffPercent, this.amount, this.diffAmount,
-      this.title, {this.color});
+  ListFundStateItem(
+      {this.text,
+      this.percent,
+      this.diffPercent,
+      this.amount,
+      this.diffAmount});
 
   final oCcy = new NumberFormat("#,##0", "ru_RU");
+  var colorPercent = Colors.grey;
+  var colorAmount = Colors.grey;
 
   @override
   Widget build(BuildContext context) {
 
+    if (diffPercent > 0) {
+      colorPercent = Colors.lightGreen;
+    } else if (diffPercent < 0) {
+      colorPercent = Colors.red;
+    }
+
+    if (diffAmount > 0) {
+      colorAmount = Colors.lightGreen;
+    } else if (diffAmount < 0) {
+      colorAmount = Colors.red;
+    }
+
     return TextButton(
-      onPressed: () => { Get.toNamed(Routes.assets_type, arguments: {"title": title}) },
+      onPressed: () => { Get.toNamed(Routes.funds_type_branch, arguments: { "type":  text}) },
       child: Container(
         child: Column(
           children: [
@@ -75,22 +74,13 @@ class FundStructureItem extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 10,
-                          height: 10,
-                          color: color,
-                          margin: const EdgeInsets.only(right: 5),
-                        ),
-                        Container(
-                          child: Text(
-                            "$title",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(fontSize: 13, color: Colors.blueGrey),
-                          ),
-                        ),
-                      ],
+                    child: Container(
+                      width: 150,
+                      child: Text(
+                        "$text",
+                        textAlign: TextAlign.left,
+                        style: TextStyle(fontSize: 13, color: Colors.blueGrey),
+                      ),
                     )),
                 Container(
                   child: Row(
@@ -107,7 +97,7 @@ class FundStructureItem extends StatelessWidget {
                         style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.blueGrey),
                       ),
                       Text(
-                        oCcy.format(amount) + " руб.",
+                        oCcy.format(amount) + " р.",
                         textAlign: TextAlign.left,
                         style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.blueGrey),
                       ),
@@ -134,7 +124,7 @@ class FundStructureItem extends StatelessWidget {
                       Text(
                         "$diffPercent%",
                         textAlign: TextAlign.left,
-                        style: TextStyle(fontSize: 12, color: diffPercent == 0 ? Colors.grey : diffPercent > 0 ? Colors.lightGreen : Colors.red),
+                        style: TextStyle(fontSize: 12, color: colorPercent),
                       ),
                       Text(
                         " / ",
@@ -144,7 +134,7 @@ class FundStructureItem extends StatelessWidget {
                       Text(
                         oCcy.format(diffAmount) + " руб.",
                         textAlign: TextAlign.left,
-                        style: TextStyle(fontSize: 12, color: diffAmount == 0 ? Colors.grey : diffAmount > 0 ? Colors.lightGreen : Colors.red),
+                        style: TextStyle(fontSize: 12, color: colorAmount),
                       ),
                     ],
                   ),

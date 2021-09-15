@@ -1,72 +1,48 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:radar/controllers/funds.dart';
 import 'package:intl/intl.dart';
 import 'package:radar/routes/routes.dart';
 
-class ListFundState extends StatelessWidget {
-
-  final FundController c = Get.find<FundController>();
+class FundTypeStructure extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Obx(() => Column(
-        children: c.branches.map(
-            (e) => Container(
-                padding: const EdgeInsets.only(top: 5),
-                child: ListFundStateItem(
-                  text: e.type,
-                  percent: e.percent,
-                  amount: e.amount,
-                  diffPercent: e.diffPercent,
-                  diffAmount: e.diffAmount,
-                )
-            )
-        ).toList()
-      )),
-    );
+
+    final FundController c = Get.find<FundController>();
+
+    return Obx(() => Wrap(
+        alignment: WrapAlignment.spaceBetween,
+        children: c.fundsAssetsStructure.map((e) {
+          return FundStructureItem(e.percent, e.diffPercent, e.amount, e.diffAmount, c.getLabelTypeByValue(e.type), color: e.color);
+        }).toList()
+    ));
   }
 
 }
 
-class ListFundStateItem extends StatelessWidget {
+class FundStructureItem extends StatelessWidget {
 
-  final String text;
   final double percent;
   final double diffPercent;
   final double amount;
   final double diffAmount;
+  final String title;
+  final Color color;
 
-  ListFundStateItem(
-      {this.text,
-      this.percent,
-      this.diffPercent,
-      this.amount,
-      this.diffAmount});
+
+  FundStructureItem(this.percent, this.diffPercent, this.amount, this.diffAmount,
+      this.title, {this.color});
 
   final oCcy = new NumberFormat("#,##0", "ru_RU");
-  var colorPercent = Colors.grey;
-  var colorAmount = Colors.grey;
 
   @override
   Widget build(BuildContext context) {
 
-    if (diffPercent > 0) {
-      colorPercent = Colors.lightGreen;
-    } else if (diffPercent < 0) {
-      colorPercent = Colors.red;
-    }
-
-    if (diffAmount > 0) {
-      colorAmount = Colors.lightGreen;
-    } else if (diffAmount < 0) {
-      colorAmount = Colors.red;
-    }
+    final arg = Get.arguments;
 
     return TextButton(
-      onPressed: () => { Get.toNamed(Routes.assets_branch, arguments: { "title":  text}) },
+      onPressed: () => { Get.toNamed(Routes.fund_type_assets, arguments: {"type": title, "id": arg["id"]}) },
       child: Container(
         child: Column(
           children: [
@@ -74,13 +50,22 @@ class ListFundStateItem extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
-                    child: Container(
-                      width: 150,
-                      child: Text(
-                        "$text",
-                        textAlign: TextAlign.left,
-                        style: TextStyle(fontSize: 13, color: Colors.blueGrey),
-                      ),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 10,
+                          height: 10,
+                          color: color,
+                          margin: const EdgeInsets.only(right: 5),
+                        ),
+                        Container(
+                          child: Text(
+                            "$title",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: 13, color: Colors.blueGrey),
+                          ),
+                        ),
+                      ],
                     )),
                 Container(
                   child: Row(
@@ -97,7 +82,7 @@ class ListFundStateItem extends StatelessWidget {
                         style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.blueGrey),
                       ),
                       Text(
-                        oCcy.format(amount) + " р.",
+                        oCcy.format(amount) + " руб.",
                         textAlign: TextAlign.left,
                         style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.blueGrey),
                       ),
@@ -124,7 +109,7 @@ class ListFundStateItem extends StatelessWidget {
                       Text(
                         "$diffPercent%",
                         textAlign: TextAlign.left,
-                        style: TextStyle(fontSize: 12, color: colorPercent),
+                        style: TextStyle(fontSize: 12, color: diffPercent == 0 ? Colors.grey : diffPercent > 0 ? Colors.lightGreen : Colors.red),
                       ),
                       Text(
                         " / ",
@@ -134,7 +119,7 @@ class ListFundStateItem extends StatelessWidget {
                       Text(
                         oCcy.format(diffAmount) + " руб.",
                         textAlign: TextAlign.left,
-                        style: TextStyle(fontSize: 12, color: colorAmount),
+                        style: TextStyle(fontSize: 12, color: diffAmount == 0 ? Colors.grey : diffAmount > 0 ? Colors.lightGreen : Colors.red),
                       ),
                     ],
                   ),

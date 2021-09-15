@@ -1,10 +1,12 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:radar/models/Fund.dart';
 import 'package:radar/models/FundStructure.dart';
 import 'package:radar/models/FundsStructure.dart';
+import 'package:radar/models/StructureItem.dart';
 
 Dio apiDio = Dio();
 
@@ -49,15 +51,23 @@ class Api {
 
   Future fetchFundStructure(id, range) async {
     var response = await Api().get(method: "/api/funds/assets/$id/$range");
-    var fundStructure = <FundStructure>[];
+    var fundStructure = <StructureItem>[];
 
     if (response != null) {
-      response.forEach((element) =>
-          fundStructure.add(FundStructure.fromMap(element))
+      response.forEach((element) {
+        var rng = new Random();
+
+        StructureItem item = StructureItem.fromMap(element);
+        item.amount = (rng.nextDouble() * 100000000).round().toDouble();
+        item.diffAmount = (item.amount - 50000000).round().toDouble();
+        fundStructure.add(item);
+      }
       );
     }
 
-    return fundStructure;
+    fundStructure.sort((a, b) => a.percent.compareTo(b.percent));
+
+    return fundStructure.reversed;
   }
 
   Future fetchFundsStructure(range, List ids) async {

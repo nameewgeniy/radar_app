@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:radar/controllers/assets.dart';
 import 'package:radar/controllers/funds.dart';
 import 'package:radar/routes/routes.dart';
 
@@ -61,16 +60,6 @@ class FundAssetsListItem extends StatelessWidget {
                     color: Colors.grey[600],
                     fontWeight: FontWeight.w500,
                     fontSize: 14)),
-            trailing: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(currentPercent.toString() + "%",
-                    style:
-                        TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
-                Text(diffPercent.toString() + "%",
-                    style: TextStyle(fontSize: 13, color: Colors.grey)),
-              ],
-            ),
           ),
         )
       ]),

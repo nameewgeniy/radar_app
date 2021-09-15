@@ -4,7 +4,7 @@ import 'package:radar/controllers/funds.dart';
 import 'package:radar/main.dart';
 import 'package:radar/routes/routes.dart';
 import 'package:radar/widgets/header_title.dart';
-import 'package:radar/pages/home/widgets/list_fuds_state.dart';
+import 'package:radar/screens/home/widgets/list_fuds_state.dart';
 
 class FundMoreList extends StatelessWidget {
   @override

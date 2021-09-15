@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:get/get.dart';
 import 'package:radar/enum/enum.dart';
-import 'package:radar/pages/pages.dart';
+import 'package:radar/screens/screens.dart';
 import 'package:radar/routes/routes.dart';
 
 class BottomBar extends StatelessWidget {

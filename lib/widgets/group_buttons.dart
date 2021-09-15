@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:radar/controllers/funds.dart';
-import 'package:radar/main.dart';
-import 'package:radar/pages/funds/widgets/price_assets.dart';
+import 'package:radar/widgets/button/border_button.dart';
 
 class GroupButtons extends StatelessWidget {
   final FundController c = Get.find<FundController>();
