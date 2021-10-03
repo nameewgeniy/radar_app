@@ -15,7 +15,6 @@ class FundPage extends StatelessWidget {
 
     if (Get.arguments["id"] != null) {
       c.selectFund(Get.arguments["id"]);
-      c.loadFundStructureByFundId();
     }
 
     return Material(

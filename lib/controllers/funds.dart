@@ -1,10 +1,7 @@
 import 'package:get/get.dart';
-import 'package:hive/hive.dart';
 import 'package:radar/api/api.dart';
 import 'package:radar/models/Assets.dart';
 import 'package:radar/models/Fund.dart';
-import 'package:radar/models/FundStructure.dart';
-import 'package:radar/models/FundsStructure.dart';
 import 'package:radar/models/Nav.dart';
 import 'package:radar/models/Period.dart';
 import 'package:radar/models/StructureItem.dart';
@@ -15,17 +12,31 @@ class FundController extends GetxController {
   var allFunds = <Fund>[].obs;
   var findFunds = <Fund>[].obs;
   var favoriteFunds = <Fund>[].obs;
-  var fundsAssetsStructure = <FundsStructure>[].obs;
+
+  // Структура избранных фондов по типу активов
+  var fundsAssetsStructure = <StructureItem>[].obs;
+
+  // Структура фонда по типу активов
+  var fundAssetsStructure = <StructureItem>[].obs;
 
   // Список активов избранных фондов
   var fundsAssetsByType = <Assets>[].obs;
+
   // Список активов фонда
   var fundAssetsByType = <Assets>[].obs;
 
+  // Сумма стоимости всех активов по избранным активам
   var sumAmount = 0.0.obs;
+
+  // Структура избранных фондов для графика
   var fundsStructureCharts = <GaugeSegment>[].obs;
-  var fundsBranchStructure = <FundsStructure>[].obs;
-  var assetsFund = <StructureItem>[].obs;
+
+  // Структура избранных фондов по отраслям
+  var fundsBranchStructure = <StructureItem>[].obs;
+
+  // Структура фонда по отраслям
+  var fundBranchStructure = <StructureItem>[].obs;
+
   var keywordFundTypeAssets = "".obs;
   var keywordFundTypeBranch = "".obs;
   var keywordFundsTypeAssets = "".obs;
@@ -45,30 +56,43 @@ class FundController extends GetxController {
     loadFundsAssetsStructure();
     loadFundsBranchStructure();
 
-    loadAssets();
-
     /*selectHomePeriod(3);
     selectNav(0);
     selectAssetsPeriod(0, null);*/
   }
 
+  /// Загрузка структруы избранных фондов по типу актива
   loadFundsAssetsStructure() async {
-    var response = await Api().fetchFundsStructure(6, favoriteFunds.value.map((e) => e.id).toList());
+    var response = await Api().fetchFundsStructure(favoriteFunds.value.map((e) => e.id).toList(), 6);
 
     fundsAssetsStructure.clear();
     sumAmount.value = 0.0;
 
     var i = 0;
     response.forEach((element) {
-      var item = FundsStructure.fromMap(element);
+      var item = StructureItem.fromMap(element);
 
-      item.color = FundStructureColors[i++];
+      item.color = StructureItem.structureColors[i++];
 
       fundsAssetsStructure.add(item);
       sumAmount.value += item.amount;
     });
 
+    fundsAssetsStructure.value.map((element) => sumAmount.value += element.amount);
     fundsAssetsStructure.value.sort((a, b) => b.percent.compareTo(a.percent));
+  }
+
+  /// Загрузка структуры фонда по типу активов
+  loadFundAssetsStructure() async {
+    if (selectedFund.value.fundId != null) {
+      var response = await Api().fetchFundStructure(selectedFund.value.fundId, 24);
+
+      fundAssetsStructure.assignAll(
+          structureItemsFromList(response)
+      );
+
+      fundAssetsStructure.value.sort((a, b) => b.percent.compareTo(a.percent));
+    }
   }
 
   /// Загрузка активов фондов по типу аткива
@@ -95,16 +119,33 @@ class FundController extends GetxController {
     fundAssetsByType.value.sort((a, b) => b.percent.compareTo(a.percent));
   }
 
+  /// Загрузка структуры избранных фондов по отраслям
   loadFundsBranchStructure() async {
-    var response = await Api().fetchBranch(6, favoriteFunds.value.map((e) => e.id).toList());
+    var response = await Api().fetchBranch(favoriteFunds.value.map((e) => e.id).toList(), 6);
     fundsBranchStructure.clear();
     response.forEach((element) =>
-        fundsBranchStructure.add(FundsStructure.fromMap(element))
+        fundsBranchStructure.add(StructureItem.fromMap(element))
     );
 
     fundsBranchStructure.value.sort((a, b) => b.percent.compareTo(a.percent));
   }
 
+  /// Загрузка структуры фонда по отраслям
+  loadFundBranchStructure() async {
+    if (selectedFund.value.fundId != null) {
+
+      fundBranchStructure.clear();
+      var response = await Api().fetchBranch([selectedFund.value.fundId], 24);
+
+      response.forEach((element) =>
+          fundBranchStructure.add(StructureItem.fromMap(element))
+      );
+
+      fundBranchStructure.value.sort((a, b) => b.percent.compareTo(a.percent));
+    }
+  }
+
+  /// Загрузка всех фондов
   loadAllFunds() async {
     var response = await Api().fetchFunds();
 
@@ -113,13 +154,7 @@ class FundController extends GetxController {
     favoriteFunds.assignAll(response);
   }
 
-  loadFundStructureByFundId() async {
-    if (selectedFund.value.fundId != null) {
-      var items = await Api().fetchFundStructure(selectedFund.value.fundId, 3);
-      assetsFund.assignAll(items);
-    }
-  }
-
+  ///
   addFavoriteFund(Fund f) {
     favoriteFunds.value.add(f);
     findFunds.refresh();
@@ -158,7 +193,8 @@ class FundController extends GetxController {
       // Загрузка графика СЧА
       navItems.clear();
       loadNav();
-      loadFundStructureByFundId();
+      loadFundAssetsStructure();
+      loadFundBranchStructure();
 
       selectedMoreItems.clear();
 
@@ -255,12 +291,6 @@ class FundController extends GetxController {
   setKeywordFundTypeAssets(String keyword) => keywordFundTypeAssets.value = keyword;
   setKeywordFundTypeBranch(String keyword) => keywordFundTypeBranch.value = keyword;
 
-  // TODO убрать
-  loadAssets() async {
-    var items = await Api().fetchFundStructure(117, 3);
-    assetsFund.assignAll(items);
-  }
-
   // OLD
   var types = [
     {
@@ -281,7 +311,7 @@ class FundController extends GetxController {
     },
   ];
 
-  var fundsStructure = <FundsStructure>[].obs;
+  var fundsStructure = <StructureItem>[].obs;
   var selectedFund = Fund().obs;
   var selectedMoreItems = <Map>[].obs;
   var selectedFundId = 0.obs;
@@ -329,7 +359,7 @@ class FundController extends GetxController {
 
   selectAssetsPeriod(value, fundId) {
     selectedAssetsPeriod.value = assetsPeriod.firstWhere((e) => (e.value == value));
-    loadFundStructureByFundId();
+    loadFundAssetsStructure();
   }
 
   selectHomePeriod(value) {

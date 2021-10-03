@@ -38,7 +38,7 @@ class FundsStructureWidget extends StatelessWidget {
           child: Obx(() => Wrap(
             alignment: WrapAlignment.spaceBetween,
             children: c.fundsAssetsStructure.map((e) {
-                return FundsStructureItem(e.percent, e.diffPercent, e.amount, e.diffAmount, c.getLabelTypeByValue(e.type), color: e.color, type: e.type);
+                return FundsStructureItem(e.percent, e.diffPercent, e.amount, e.diffAmount, c.getLabelTypeByValue(e.name), color: e.color, type: e.name);
               }).toList()
           )),
         ),

@@ -17,7 +17,7 @@ class ListFundState extends StatelessWidget {
             (e) => Container(
                 padding: const EdgeInsets.only(top: 5),
                 child: ListFundStateItem(
-                  text: e.type,
+                  text: e.name,
                   percent: e.percent,
                   amount: e.amount,
                   diffPercent: e.diffPercent,

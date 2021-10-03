@@ -4,8 +4,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:radar/models/Fund.dart';
-import 'package:radar/models/FundStructure.dart';
-import 'package:radar/models/FundsStructure.dart';
 import 'package:radar/models/StructureItem.dart';
 
 Dio apiDio = Dio();
@@ -50,31 +48,14 @@ class Api {
   }
 
   Future fetchFundStructure(id, range) async {
-    var response = await Api().get(method: "/api/funds/assets/$id/$range");
-    var fundStructure = <StructureItem>[];
-
-    if (response != null) {
-      response.forEach((element) {
-        var rng = new Random();
-
-        StructureItem item = StructureItem.fromMap(element);
-        item.amount = (rng.nextDouble() * 100000000).round().toDouble();
-        item.diffAmount = (item.amount - 50000000).round().toDouble();
-        fundStructure.add(item);
-      }
-      );
-    }
-
-    fundStructure.sort((a, b) => a.percent.compareTo(b.percent));
-
-    return fundStructure.reversed;
+    return await Api().get(method: "/api/funds/structure/type/$range?ids[]=$id");
   }
 
-  Future fetchFundsStructure(range, List ids) async {
+  Future fetchFundsStructure(List ids, range) async {
     return await Api().get(method: "/api/funds/structure/type/$range?ids[]=" + ids.join("&ids[]="));
   }
 
-  Future fetchBranch(range, List ids) async {
+  Future fetchBranch( List ids, range) async {
     return await Api().get(method: "/api/funds/structure/branch/$range?ids[]=" + ids.join("&ids[]="));
   }
 
