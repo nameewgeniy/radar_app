@@ -39,11 +39,12 @@ class StructureItem {
   double amount;
   double diffAmount;
   String name;
+  String type;
   Color color;
 
 
   StructureItem({ this.percent, this.diffPercent, this.amount,
-    this.diffAmount, this.name, this.color });
+    this.diffAmount, this.name, this.color, this.type });
 
   factory StructureItem.fromMap(json) {
     return StructureItem(
@@ -51,15 +52,15 @@ class StructureItem {
         diffPercent: double.parse(json["diff_percent"].toStringAsFixed(2)),
         amount: double.parse(json["amount"].toStringAsFixed(2)),
         diffAmount: double.parse(json["diff_amount"].toStringAsFixed(2)),
-        name: json["type"],
+        type: json["type"],
+        name: json["name"],
       );
   }
-
-
 
   Map<String, dynamic> toMap() => {
     "percent": percent,
     "name": name,
+    "type": type,
     "diff_percent": diffPercent,
     "diff_amount": diffAmount,
     "amount": amount

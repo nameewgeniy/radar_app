@@ -20,9 +20,9 @@ class FundAssetsList extends StatelessWidget {
                   ),
                 ),
               ),
-              itemCount: c.fundAssetsStructure.length,
+              itemCount: c.fundStructureByType.length,
               itemBuilder: (context, index) {
-                final item = c.fundAssetsStructure[index];
+                final item = c.fundStructureByType[index];
                 return FundAssetsListItem(
                   item.name,
                   0,

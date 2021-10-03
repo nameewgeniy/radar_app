@@ -2,13 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:radar/screens/home/widgets/favorite_funds.dart';
-import 'package:radar/screens/home/widgets/fund_structure.dart';
+import 'package:radar/screens/home/widgets/fund_structure_by_branch.dart';
+import 'package:radar/screens/home/widgets/fund_structure_by_type.dart';
 import 'package:radar/screens/home/widgets/select_fund_button.dart';
 import 'package:radar/routes/routes.dart';
 import 'package:radar/widgets/bottom_bar.dart';
 import 'package:radar/widgets/custom_drawer.dart';
 import 'package:radar/widgets/header_title.dart';
-import 'package:radar/screens/home/widgets/list_fuds_state.dart';
 
 class HomePage extends StatelessWidget {
   @override
@@ -41,7 +41,7 @@ class HomePage extends StatelessWidget {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 10, right: 10),
-                    child: FundsStructureWidget(),
+                    child: FundsStructureByType(),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 10, top: 15, bottom: 5),
@@ -51,7 +51,7 @@ class HomePage extends StatelessWidget {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left:10, right: 20),
-                    child: ListFundState(),
+                    child: FundsStructureByBranch(),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left:10, top: 15, bottom: 15),

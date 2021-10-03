@@ -47,23 +47,23 @@ class Api {
     return funds;
   }
 
-  Future fetchFundStructure(id, range) async {
-    return await Api().get(method: "/api/funds/structure/type/$range?ids[]=$id");
+  Future fetchFundsStructureByType(List fundIds, range) async {
+    return await Api().get(method: "/api/funds/structure/type/$range?ids[]=" + fundIds.join("&ids[]="));
   }
 
-  Future fetchFundsStructure(List ids, range) async {
-    return await Api().get(method: "/api/funds/structure/type/$range?ids[]=" + ids.join("&ids[]="));
-  }
-
-  Future fetchBranch( List ids, range) async {
-    return await Api().get(method: "/api/funds/structure/branch/$range?ids[]=" + ids.join("&ids[]="));
+  Future fetchFundsStructureByBranch(List fundIds, range) async {
+    return await Api().get(method: "/api/funds/structure/branch/$range?ids[]=" + fundIds.join("&ids[]="));
   }
 
   Future fetchNavByFundId(id, range) async {
     return await Api().get(method: "/api/assets/nav/$id/$range");
   }
 
-  Future fetchAssetsByTypeAndFundIds(type, List ids) async {
-    return await Api().get(method: "/api/assets/type/$type?ids[]=" + ids.join("&ids[]="));
+  Future fetchAssetsByType(type, List fundIds) async {
+    return await Api().get(method: "/api/assets/type/$type?ids[]=" + fundIds.join("&ids[]="));
+  }
+
+  Future fetchAssetsByBranch(branch, List fundIds) async {
+    return await Api().get(method: "/api/assets/branch/$branch?ids[]=" + fundIds.join("&ids[]="));
   }
 }

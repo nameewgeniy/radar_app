@@ -38,7 +38,7 @@ class AssetsController extends GetxController {
   }
 
   loadAssets() async {
-    var items = await Api().fetchFundStructure(117, 3);
+    var items = await Api().fetchFundsStructureByType([117], 3);
     allAssets.assignAll(items);
   }
 

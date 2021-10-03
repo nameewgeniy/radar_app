@@ -14,16 +14,22 @@ class FundController extends GetxController {
   var favoriteFunds = <Fund>[].obs;
 
   // Структура избранных фондов по типу активов
-  var fundsAssetsStructure = <StructureItem>[].obs;
+  var fundsStructureByType = <StructureItem>[].obs;
 
   // Структура фонда по типу активов
-  var fundAssetsStructure = <StructureItem>[].obs;
+  var fundStructureByType = <StructureItem>[].obs;
 
   // Список активов избранных фондов
   var fundsAssetsByType = <Assets>[].obs;
 
-  // Список активов фонда
+  // Список активов фонда по типу
   var fundAssetsByType = <Assets>[].obs;
+
+  // Список активов фонда по отрасли
+  var fundAssetsByBranch = <Assets>[].obs;
+
+  // Список активов избранных фондов по отрасли
+  var fundsAssetsByBranch = <Assets>[].obs;
 
   // Сумма стоимости всех активов по избранным активам
   var sumAmount = 0.0.obs;
@@ -32,10 +38,10 @@ class FundController extends GetxController {
   var fundsStructureCharts = <GaugeSegment>[].obs;
 
   // Структура избранных фондов по отраслям
-  var fundsBranchStructure = <StructureItem>[].obs;
+  var fundsStructureByBranch = <StructureItem>[].obs;
 
   // Структура фонда по отраслям
-  var fundBranchStructure = <StructureItem>[].obs;
+  var fundStructureByBranch = <StructureItem>[].obs;
 
   var keywordFundTypeAssets = "".obs;
   var keywordFundTypeBranch = "".obs;
@@ -43,29 +49,23 @@ class FundController extends GetxController {
   var keywordFundsTypeBranch = "".obs;
 
 
-/*
   @override
   void onInit() {
-    loadAllFunds();
-    super.onInit();
-  }*/
-
-  FundController() {
 
     loadAllFunds();
     loadFundsAssetsStructure();
     loadFundsBranchStructure();
 
-    /*selectHomePeriod(3);
-    selectNav(0);
-    selectAssetsPeriod(0, null);*/
+    super.onInit();
   }
+
+  FundController() {}
 
   /// Загрузка структруы избранных фондов по типу актива
   loadFundsAssetsStructure() async {
-    var response = await Api().fetchFundsStructure(favoriteFunds.value.map((e) => e.id).toList(), 6);
+    var response = await Api().fetchFundsStructureByType(favoriteFunds.value.map((e) => e.id).toList(), 6);
 
-    fundsAssetsStructure.clear();
+    fundsStructureByType.clear();
     sumAmount.value = 0.0;
 
     var i = 0;
@@ -74,30 +74,30 @@ class FundController extends GetxController {
 
       item.color = StructureItem.structureColors[i++];
 
-      fundsAssetsStructure.add(item);
+      fundsStructureByType.add(item);
       sumAmount.value += item.amount;
     });
 
-    fundsAssetsStructure.value.map((element) => sumAmount.value += element.amount);
-    fundsAssetsStructure.value.sort((a, b) => b.percent.compareTo(a.percent));
+    fundsStructureByType.value.map((element) => sumAmount.value += element.amount);
+    fundsStructureByType.value.sort((a, b) => b.percent.compareTo(a.percent));
   }
 
   /// Загрузка структуры фонда по типу активов
   loadFundAssetsStructure() async {
     if (selectedFund.value.fundId != null) {
-      var response = await Api().fetchFundStructure(selectedFund.value.fundId, 24);
+      var response = await Api().fetchFundsStructureByType([selectedFund.value.fundId], 24);
 
-      fundAssetsStructure.assignAll(
+      fundStructureByType.assignAll(
           structureItemsFromList(response)
       );
 
-      fundAssetsStructure.value.sort((a, b) => b.percent.compareTo(a.percent));
+      fundStructureByType.value.sort((a, b) => b.percent.compareTo(a.percent));
     }
   }
 
   /// Загрузка активов фондов по типу аткива
-  loadFundsAssets(type) async {
-    var response = await Api().fetchAssetsByTypeAndFundIds(type, favoriteFunds.value.map((e) => e.id).toList());
+  loadFundsAssetsByType(type) async {
+    var response = await Api().fetchAssetsByType(type, favoriteFunds.value.map((e) => e.id).toList());
 
     fundsAssetsByType.clear();
     if (response != null) {
@@ -108,8 +108,8 @@ class FundController extends GetxController {
   }
 
   /// Загрузка активов фондА по типу аткива
-  loadFundAssets(type, fundId) async {
-    var response = await Api().fetchAssetsByTypeAndFundIds(type, [fundId]);
+  loadFundAssetsByType(type, fundId) async {
+    var response = await Api().fetchAssetsByType(type, [fundId]);
 
     fundAssetsByType.clear();
     if (response != null) {
@@ -119,29 +119,53 @@ class FundController extends GetxController {
     fundAssetsByType.value.sort((a, b) => b.percent.compareTo(a.percent));
   }
 
+  /// Загрузка активов фондА по отрасли
+  loadFundAssetsByBranch(branch, fundId) async {
+    var response = await Api().fetchAssetsByBranch(branch, [fundId]);
+
+    fundAssetsByBranch.clear();
+    if (response != null) {
+      response.forEach((element) => fundAssetsByBranch.add(Assets.fromMap(element)));
+    }
+
+    fundAssetsByBranch.value.sort((a, b) => b.percent.compareTo(a.percent));
+  }
+
+  /// Загрузка активов избранных фондов по отрасли
+  loadFundsAssetsByBranch(branch) async {
+    var response = await Api().fetchAssetsByBranch(branch, favoriteFunds.value.map((e) => e.id).toList());
+
+    fundsAssetsByBranch.clear();
+    if (response != null) {
+      response.forEach((element) => fundsAssetsByBranch.add(Assets.fromMap(element)));
+    }
+
+    fundsAssetsByBranch.value.sort((a, b) => b.percent.compareTo(a.percent));
+  }
+
   /// Загрузка структуры избранных фондов по отраслям
   loadFundsBranchStructure() async {
-    var response = await Api().fetchBranch(favoriteFunds.value.map((e) => e.id).toList(), 6);
-    fundsBranchStructure.clear();
+    var response = await Api().fetchFundsStructureByBranch(favoriteFunds.value.map((e) => e.id).toList(), 6);
+    fundsStructureByBranch.clear();
     response.forEach((element) =>
-        fundsBranchStructure.add(StructureItem.fromMap(element))
+        fundsStructureByBranch.add(StructureItem.fromMap(element))
     );
 
-    fundsBranchStructure.value.sort((a, b) => b.percent.compareTo(a.percent));
+    fundsStructureByBranch.value.sort((a, b) => b.percent.compareTo(a.percent));
   }
 
   /// Загрузка структуры фонда по отраслям
   loadFundBranchStructure() async {
     if (selectedFund.value.fundId != null) {
 
-      fundBranchStructure.clear();
-      var response = await Api().fetchBranch([selectedFund.value.fundId], 24);
+      fundStructureByBranch.clear();
+      var response = await Api().fetchFundsStructureByBranch([selectedFund.value.fundId], 24);
 
       response.forEach((element) =>
-          fundBranchStructure.add(StructureItem.fromMap(element))
+          fundStructureByBranch.add(StructureItem.fromMap(element))
       );
 
-      fundBranchStructure.value.sort((a, b) => b.percent.compareTo(a.percent));
+      fundStructureByBranch.value.sort((a, b) => b.percent.compareTo(a.percent));
     }
   }
 
@@ -230,12 +254,22 @@ class FundController extends GetxController {
 
   selectAssetsTypeFunds(type) {
     fundsAssetsByType.clear();
-    loadFundsAssets(type);
+    loadFundsAssetsByType(type);
   }
   
   selectAssetsTypeFund(type, id) {
     fundAssetsByType.clear();
-    loadFundAssets(type, id);
+    loadFundAssetsByType(type, id);
+  }
+
+  selectAssetsBranchFunds(branch) {
+    fundsAssetsByBranch.clear();
+    loadFundsAssetsByBranch(branch);
+  }
+
+  selectAssetsBranchFund(branch, id) {
+    fundAssetsByBranch.clear();
+    loadFundAssetsByBranch(branch, id);
   }
 
   List<Assets> get findFundsTypeAssets {
@@ -399,6 +433,4 @@ class FundController extends GetxController {
         ) >= 0)
     );
   }
-
-
 }

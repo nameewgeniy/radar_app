@@ -13,7 +13,7 @@ class FundBranchStructure extends StatelessWidget {
 
     return Container(
       child: Obx(() => Column(
-          children: c.fundBranchStructure.map(
+          children: c.fundStructureByBranch.map(
                   (e) => Container(
                   padding: const EdgeInsets.only(top: 5),
                   child: FundBranchStructureItem(

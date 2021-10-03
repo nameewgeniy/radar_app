@@ -1,73 +1,76 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:radar/controllers/funds.dart';
 import 'package:intl/intl.dart';
 import 'package:radar/routes/routes.dart';
-import 'package:radar/widgets/chart/chart.dart';
 
-class FundsStructureWidget extends StatelessWidget {
+class FundsStructureByBranch extends StatelessWidget {
+
+  final FundController c = Get.find<FundController>();
 
   @override
   Widget build(BuildContext context) {
-
-    final c = Get.find<FundController>();
-    final oCcy = new NumberFormat("#,##0", "ru_RU");
-
-    return Column(
-      children: [
-        Container(
-            height: 250,
-            child: Stack(
-              children: [
-                Obx(() => GaugeChart(c.fundsAssetsStructure.value)),
-                Container(
-                  padding: const EdgeInsets.only(bottom: 45),
-                  child: Center(
-                    child: Text("Общая стоимость")
-                  ),
-                ),
-                Center(
-                  child: Obx(() => Text(
-                      oCcy.format(c.sumAmount.value) + ' руб.',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ))
+    return Container(
+      child: Obx(() => Column(
+        children: c.fundsStructureByBranch.map(
+            (e) => Container(
+                padding: const EdgeInsets.only(top: 5),
+                child: FundsStructureByBranchItem(
+                  name: e.name,
+                  type: e.type,
+                  percent: e.percent,
+                  amount: e.amount,
+                  diffPercent: e.diffPercent,
+                  diffAmount: e.diffAmount,
                 )
-              ],
-            )),
-        Container(
-          child: Obx(() => Wrap(
-            alignment: WrapAlignment.spaceBetween,
-            children: c.fundsAssetsStructure.map((e) {
-                return FundsStructureItem(e.percent, e.diffPercent, e.amount, e.diffAmount, c.getLabelTypeByValue(e.name), color: e.color, type: e.name);
-              }).toList()
-          )),
-        ),
-      ],
+            )
+        ).toList()
+      )),
     );
   }
+
 }
 
-class FundsStructureItem extends StatelessWidget {
+class FundsStructureByBranchItem extends StatelessWidget {
 
+  final String type;
+  final String name;
   final double percent;
   final double diffPercent;
   final double amount;
   final double diffAmount;
-  final String title;
-  final String type;
-  final Color color;
 
-
-  FundsStructureItem(this.percent, this.diffPercent, this.amount, this.diffAmount,
-      this.title, {this.color, this.type});
+  FundsStructureByBranchItem({
+    this.type,
+    this.name,
+    this.percent,
+    this.diffPercent,
+    this.amount,
+    this.diffAmount
+  });
 
   final oCcy = new NumberFormat("#,##0", "ru_RU");
+  var colorPercent = Colors.grey;
+  var colorAmount = Colors.grey;
 
   @override
   Widget build(BuildContext context) {
 
+    if (diffPercent > 0) {
+      colorPercent = Colors.lightGreen;
+    } else if (diffPercent < 0) {
+      colorPercent = Colors.red;
+    }
+
+    if (diffAmount > 0) {
+      colorAmount = Colors.lightGreen;
+    } else if (diffAmount < 0) {
+      colorAmount = Colors.red;
+    }
+
     return TextButton(
-      onPressed: () => { Get.toNamed(Routes.funds_type_assets, arguments: {"title": title, "type": type}) },
+      onPressed: () => { Get.toNamed(Routes.funds_type_branch, arguments: {"type": type, "title": name}) },
       child: Container(
         child: Column(
           children: [
@@ -75,22 +78,13 @@ class FundsStructureItem extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 10,
-                          height: 10,
-                          color: color,
-                          margin: const EdgeInsets.only(right: 5),
-                        ),
-                        Container(
-                          child: Text(
-                            "$title",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(fontSize: 13, color: Colors.blueGrey),
-                          ),
-                        ),
-                      ],
+                    child: Container(
+                      width: 150,
+                      child: Text(
+                        "$name",
+                        textAlign: TextAlign.left,
+                        style: TextStyle(fontSize: 13, color: Colors.blueGrey),
+                      ),
                     )),
                 Container(
                   child: Row(
@@ -107,7 +101,7 @@ class FundsStructureItem extends StatelessWidget {
                         style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.blueGrey),
                       ),
                       Text(
-                        oCcy.format(amount) + " руб.",
+                        oCcy.format(amount) + " р.",
                         textAlign: TextAlign.left,
                         style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.blueGrey),
                       ),
@@ -134,7 +128,7 @@ class FundsStructureItem extends StatelessWidget {
                       Text(
                         "$diffPercent%",
                         textAlign: TextAlign.left,
-                        style: TextStyle(fontSize: 12, color: diffPercent == 0 ? Colors.grey : diffPercent > 0 ? Colors.lightGreen : Colors.red),
+                        style: TextStyle(fontSize: 12, color: colorPercent),
                       ),
                       Text(
                         " / ",
@@ -144,7 +138,7 @@ class FundsStructureItem extends StatelessWidget {
                       Text(
                         oCcy.format(diffAmount) + " руб.",
                         textAlign: TextAlign.left,
-                        style: TextStyle(fontSize: 12, color: diffAmount == 0 ? Colors.grey : diffAmount > 0 ? Colors.lightGreen : Colors.red),
+                        style: TextStyle(fontSize: 12, color: colorAmount),
                       ),
                     ],
                   ),

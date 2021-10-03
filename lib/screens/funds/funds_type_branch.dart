@@ -17,7 +17,7 @@ class FundsTypeBranchPage extends StatelessWidget {
       clipBehavior: Clip.antiAliasWithSaveLayer,
       child: Scaffold(
         appBar: AppBar(
-          title: Text( arg['type'] ?? "Отрасль"),
+          title: Text( arg['title'] ?? "Отрасль"),
           centerTitle: true,
         ),
         body: Container(
