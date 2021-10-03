@@ -14,7 +14,7 @@ class FundTypeStructure extends StatelessWidget {
     return Obx(() => Wrap(
         alignment: WrapAlignment.spaceBetween,
         children: c.fundsAssetsStructure.map((e) {
-          return FundStructureItem(e.percent, e.diffPercent, e.amount, e.diffAmount, c.getLabelTypeByValue(e.type), color: e.color);
+          return FundStructureItem(e.percent, e.diffPercent, e.amount, e.diffAmount, c.getLabelTypeByValue(e.type), color: e.color, type: e.type);
         }).toList()
     ));
   }
@@ -28,11 +28,12 @@ class FundStructureItem extends StatelessWidget {
   final double amount;
   final double diffAmount;
   final String title;
+  final String type;
   final Color color;
 
 
   FundStructureItem(this.percent, this.diffPercent, this.amount, this.diffAmount,
-      this.title, {this.color});
+      this.title, {this.color, this.type});
 
   final oCcy = new NumberFormat("#,##0", "ru_RU");
 
@@ -42,7 +43,7 @@ class FundStructureItem extends StatelessWidget {
     final arg = Get.arguments;
 
     return TextButton(
-      onPressed: () => { Get.toNamed(Routes.fund_type_assets, arguments: {"type": title, "id": arg["id"]}) },
+      onPressed: () => { Get.toNamed(Routes.fund_type_assets, arguments: {"title": title, "id": arg["id"], "type": type}) },
       child: Container(
         child: Column(
           children: [

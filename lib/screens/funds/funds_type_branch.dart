@@ -25,7 +25,7 @@ class FundsTypeBranchPage extends StatelessWidget {
           child: Column(
             children: [
               PrimaryInput( "Поиск", (value) => { c.setKeywordFundsTypeBranch(value) } ),
-              Expanded(child: Obx(() => StructureList(c.findFundsTypeBranch))),
+              Expanded(child: Obx(() => AssetsList(c.findFundsTypeBranch))),
             ],
           ),
         ),

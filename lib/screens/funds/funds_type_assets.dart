@@ -12,12 +12,13 @@ class FundsTypeAssetsPage extends StatelessWidget {
 
     final arg = Get.arguments;
     final FundController c = Get.find<FundController>();
+    c.selectAssetsTypeFunds(arg['type'] ?? '');
 
     return Material(
       clipBehavior: Clip.antiAliasWithSaveLayer,
       child: Scaffold(
         appBar: AppBar(
-          title: Text(arg['type'] ?? "Тип активов"),
+          title: Text(arg['title'] ?? "Тип активов"),
           centerTitle: true,
         ),
         body: Container(
@@ -25,7 +26,7 @@ class FundsTypeAssetsPage extends StatelessWidget {
             child: Column(
               children: [
                 PrimaryInput( "Поиск", (value) => { c.setKeywordFundsTypeAssets(value) } ),
-                Expanded(child: Obx(() => StructureList(c.findFundsTypeAssets))),
+                Expanded(child: Obx(() => AssetsList(c.findFundsTypeAssets))),
               ],
             ),
         ),

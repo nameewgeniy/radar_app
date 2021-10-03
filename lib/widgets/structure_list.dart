@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:radar/models/StructureItem.dart';
+import 'package:radar/models/Assets.dart';
 
-class StructureList extends StatelessWidget {
+class AssetsList extends StatelessWidget {
 
-  final List<StructureItem> items;
+  final List<Assets> items;
 
-  StructureList(this.items);
+  AssetsList(this.items);
 
   @override
   Widget build(BuildContext context) {
@@ -22,18 +22,18 @@ class StructureList extends StatelessWidget {
       ),
       itemCount: items.length,
       itemBuilder: (context, index) {
-        return StructureListItem(items[index]);
+        return AssetsListItem(items[index]);
       },
     );
   }
 
 }
 
-class StructureListItem extends StatelessWidget {
+class AssetsListItem extends StatelessWidget {
 
-  final StructureItem item;
+  final Assets item;
 
-  StructureListItem(this.item);
+  AssetsListItem(this.item);
 
   @override
   Widget build(BuildContext context) {
@@ -65,21 +65,6 @@ class StructureListItem extends StatelessWidget {
                       style:
                       TextStyle(fontSize: 12,
                           color: item.amount == 0 ? Colors.grey : item.amount > 0 ? Colors.lightGreen : Colors.red,
-                          fontWeight: FontWeight.w500
-                      )
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  Text("Изменение: ",
-                      style:
-                      TextStyle(fontSize: 12, color: Colors.grey, fontWeight: FontWeight.w500)
-                  ),
-                  Text(item.diffAmount.toString() + " руб",
-                      style:
-                      TextStyle(fontSize: 12,
-                          color: item.diffAmount == 0 ? Colors.grey : item.diffAmount > 0 ? Colors.lightGreen : Colors.red,
                           fontWeight: FontWeight.w500
                       )
                   ),

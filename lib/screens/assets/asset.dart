@@ -27,11 +27,7 @@ class AssetPage extends StatelessWidget {
           color: Colors.white,
           child: Padding(
               padding: const EdgeInsets.only(left: 0, top: 10),
-              child: Container(
-                child: Expanded(
-                  child: AssetStructureFund(),
-                ),
-              ))
+              child: AssetStructureFund())
         ),
         bottomNavigationBar: BottomBar(),
         backgroundColor: Colors.white,
@@ -64,7 +60,7 @@ class AssetStructureFund extends StatelessWidget {
               ),
             ),
           ),
-          itemCount: c.favoriteFunds.length,
+          itemCount: c.allFunds.length,
           itemBuilder: (context, index) => FavoriteFundItem(
               c.allFunds[index].nameRus,
               c.allFunds[index].id,

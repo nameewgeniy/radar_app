@@ -81,4 +81,8 @@ class Api {
   Future fetchNavByFundId(id, range) async {
     return await Api().get(method: "/api/assets/nav/$id/$range");
   }
+
+  Future fetchAssetsByTypeAndFundIds(type, List ids) async {
+    return await Api().get(method: "/api/assets/type/$type?ids[]=" + ids.join("&ids[]="));
+  }
 }

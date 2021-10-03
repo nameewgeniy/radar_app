@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:radar/api/api.dart';
+import 'package:radar/models/Assets.dart';
 import 'package:radar/models/Fund.dart';
 import 'package:radar/models/FundStructure.dart';
 import 'package:radar/models/FundsStructure.dart';
@@ -15,6 +16,12 @@ class FundController extends GetxController {
   var findFunds = <Fund>[].obs;
   var favoriteFunds = <Fund>[].obs;
   var fundsAssetsStructure = <FundsStructure>[].obs;
+
+  // Список активов избранных фондов
+  var fundsAssetsByType = <Assets>[].obs;
+  // Список активов фонда
+  var fundAssetsByType = <Assets>[].obs;
+
   var sumAmount = 0.0.obs;
   var fundsStructureCharts = <GaugeSegment>[].obs;
   var fundsBranchStructure = <FundsStructure>[].obs;
@@ -23,6 +30,7 @@ class FundController extends GetxController {
   var keywordFundTypeBranch = "".obs;
   var keywordFundsTypeAssets = "".obs;
   var keywordFundsTypeBranch = "".obs;
+
 
 /*
   @override
@@ -61,6 +69,30 @@ class FundController extends GetxController {
     });
 
     fundsAssetsStructure.value.sort((a, b) => b.percent.compareTo(a.percent));
+  }
+
+  /// Загрузка активов фондов по типу аткива
+  loadFundsAssets(type) async {
+    var response = await Api().fetchAssetsByTypeAndFundIds(type, favoriteFunds.value.map((e) => e.id).toList());
+
+    fundsAssetsByType.clear();
+    if (response != null) {
+      response.forEach((element) => fundsAssetsByType.add(Assets.fromMap(element)));
+    }
+
+    fundsAssetsByType.value.sort((a, b) => b.percent.compareTo(a.percent));
+  }
+
+  /// Загрузка активов фондА по типу аткива
+  loadFundAssets(type, fundId) async {
+    var response = await Api().fetchAssetsByTypeAndFundIds(type, [fundId]);
+
+    fundAssetsByType.clear();
+    if (response != null) {
+      response.forEach((element) => fundAssetsByType.add(Assets.fromMap(element)));
+    }
+
+    fundAssetsByType.value.sort((a, b) => b.percent.compareTo(a.percent));
   }
 
   loadFundsBranchStructure() async {
@@ -160,52 +192,62 @@ class FundController extends GetxController {
     }
   }
 
-  List<StructureItem> get findFundsTypeAssets {
+  selectAssetsTypeFunds(type) {
+    fundsAssetsByType.clear();
+    loadFundsAssets(type);
+  }
+  
+  selectAssetsTypeFund(type, id) {
+    fundAssetsByType.clear();
+    loadFundAssets(type, id);
+  }
 
-    if (assetsFund.isNotEmpty) {
-      return assetsFund.value.where((element) =>
+  List<Assets> get findFundsTypeAssets {
+
+    if (fundsAssetsByType.isNotEmpty) {
+      return fundsAssetsByType.value.where((element) =>
         element.name.toString().toUpperCase().indexOf(
           keywordFundsTypeAssets.value.toUpperCase()
       ) >= 0).toList();
     }
 
-    return assetsFund;
+    return fundsAssetsByType;
   }
 
-  List<StructureItem> get findFundsTypeBranch {
+  List<Assets> get findFundsTypeBranch {
 
-    if (assetsFund.isNotEmpty) {
-      return assetsFund.value.where((element) =>
+    if (fundsAssetsByType.isNotEmpty) {
+      return fundsAssetsByType.value.where((element) =>
       element.name.toString().toUpperCase().indexOf(
           keywordFundsTypeBranch.value.toUpperCase()
       ) >= 0).toList();
     }
 
-    return assetsFund;
+    return fundsAssetsByType;
   }
 
-  List<StructureItem> get findFundTypeBranch {
+  List<Assets> get findFundTypeBranch {
 
-    if (assetsFund.isNotEmpty) {
-      return assetsFund.value.where((element) =>
+    if (fundAssetsByType.isNotEmpty) {
+      return fundAssetsByType.value.where((element) =>
       element.name.toString().toUpperCase().indexOf(
           keywordFundTypeBranch.value.toUpperCase()
       ) >= 0).toList();
     }
 
-    return assetsFund;
+    return fundAssetsByType;
   }
 
-  List<StructureItem> get findFundTypeAssets {
+  List<Assets> get findFundTypeAssets {
 
-    if (assetsFund.isNotEmpty) {
-      return assetsFund.value.where((element) =>
+    if (fundAssetsByType.isNotEmpty) {
+      return fundAssetsByType.value.where((element) =>
       element.name.toString().toUpperCase().indexOf(
           keywordFundTypeAssets.value.toUpperCase()
       ) >= 0).toList();
     }
 
-    return assetsFund;
+    return fundAssetsByType;
   }
 
   setKeywordFundsTypeAssets(String keyword) => keywordFundsTypeAssets.value = keyword;
