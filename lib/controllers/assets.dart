@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:radar/api/api.dart';
 import 'package:radar/models/AssetsStructure.dart';
 import 'package:radar/models/BranchStructure.dart';
 
@@ -31,6 +32,15 @@ class AssetsController extends GetxController {
     new BranchStructure(amount: 1450, name: "Branch", diffAmount: 12, diffPercent: 23, percent: 60),
     new BranchStructure(amount: 1450, name: "Branch", diffAmount: 12, diffPercent: 23, percent: 60),
   ].obs;
+
+  AssetsController() {
+    loadAssets();
+  }
+
+  loadAssets() async {
+    var items = await Api().fetchFundStructure(117, 3);
+    allAssets.assignAll(items);
+  }
 
   filterAssetsByKeywords(value) {
 
