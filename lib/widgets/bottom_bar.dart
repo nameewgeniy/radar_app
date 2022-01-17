@@ -53,7 +53,7 @@ class BottomBarItem extends StatelessWidget {
   final double width;
   final String route;
 
-  BottomBarItem(
+    BottomBarItem(
       this.icon,
       this.label,
       this.width,

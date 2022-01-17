@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:radar/controllers/funds.dart';
+import 'package:radar/controllers/assets.dart';
 import 'package:radar/routes/routes.dart';
 
 class FundAssetsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final FundController c = Get.find<FundController>();
+    final AssetsController c = Get.find<AssetsController>();
 
     return Container(
         child: Obx(() => ListView.separated(
@@ -20,14 +20,14 @@ class FundAssetsList extends StatelessWidget {
                   ),
                 ),
               ),
-              itemCount: c.fundStructureByType.length,
+              itemCount: c.findAssets.length,
               itemBuilder: (context, index) {
-                final item = c.fundStructureByType[index];
+                final item = c.findAssets[index];
                 return FundAssetsListItem(
                   item.name,
                   0,
                   item.percent,
-                  item.diffPercent,
+                  item.amount,
                 );
               },
             ))
@@ -37,12 +37,12 @@ class FundAssetsList extends StatelessWidget {
 
 class FundAssetsListItem extends StatelessWidget {
   final String text;
-  final double currentPercent;
-  final double diffPercent;
+  final double percent;
+  final double amount;
   final int id;
 
   FundAssetsListItem(
-      this.text, this.id, this.currentPercent, this.diffPercent);
+      this.text, this.id, this.percent, this.amount);
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +60,18 @@ class FundAssetsListItem extends StatelessWidget {
                     color: Colors.grey[600],
                     fontWeight: FontWeight.w500,
                     fontSize: 14)),
+            trailing: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(percent.toString() + "%",
+                    style:
+                    TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+                Text(amount.toString() + " руб",
+                    style: TextStyle(fontSize: 13, color: Colors.grey)),
+              ],
+            ),
           ),
+
         )
       ]),
     );

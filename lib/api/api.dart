@@ -66,4 +66,8 @@ class Api {
   Future fetchAssetsByBranch(branch, List fundIds) async {
     return await Api().get(method: "/api/assets/branch/$branch?ids[]=" + fundIds.join("&ids[]="));
   }
+
+  Future fetchAssetsAll() async {
+    return await Api().get(method: "/api/assets/type/stock?ids[]=");
+  }
 }

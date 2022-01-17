@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:radar/api/api.dart';
+import 'package:radar/models/Assets.dart';
 import 'package:radar/models/AssetsStructure.dart';
 import 'package:radar/models/BranchStructure.dart';
 
@@ -38,8 +39,14 @@ class AssetsController extends GetxController {
   }
 
   loadAssets() async {
-    var items = await Api().fetchFundsStructureByType([117], 3);
-    allAssets.assignAll(items);
+    var items = await Api().fetchAssetsAll();
+
+    allAssets.clear();
+    if (items != null) {
+      items.forEach((element) => allAssets.add(Assets.fromMap(element)));
+    }
+
+    findAssets.assignAll(allAssets.value);
   }
 
   filterAssetsByKeywords(value) {
@@ -50,7 +57,7 @@ class AssetsController extends GetxController {
 
     searchAssetsKeyword.value = value;
     findAssets.assignAll(
-        allAssets.value.where((element) => element.nameRus.toString().toUpperCase().indexOf(
+        allAssets.value.where((element) => element.name.toString().toUpperCase().indexOf(
             value.toString().toUpperCase()
         ) >= 0)
     );
